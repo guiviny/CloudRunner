@@ -15,37 +15,45 @@ export function TopBar() {
   const onHome = useLocation().pathname === '/'
   const auth = useAuth()
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between border-b-2 border-line bg-bg/80 px-4 py-3 font-display font-extrabold backdrop-blur">
-      <span className="flex items-center gap-2 text-ink">
-        {!onHome && (
-          <Link to="/" className="hidden sm:inline-block">
-            <Logo size="sm" />
-          </Link>
-        )}
-        <span title="Seção AWS" className="rounded-md bg-[#232F3E] px-1.5 text-xs text-[#FF9900]">
-          aws
+    <header className="sticky top-0 z-20 border-b-2 border-line bg-bg/80 font-display font-extrabold whitespace-nowrap backdrop-blur">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-3 py-3 sm:gap-4 sm:px-4">
+        <span className="flex items-center gap-2 text-ink">
+          {!onHome && (
+            <Link to="/" className="hidden md:inline-block">
+              <Logo size="sm" />
+            </Link>
+          )}
+          <span title="Seção AWS" className="hidden rounded-md bg-[#232F3E] px-1.5 text-xs text-[#FF9900] sm:inline">
+            aws
+          </span>
+          {!onHome && (
+            <Link
+              to="/"
+              aria-label="Menu"
+              className="rounded-lg border-2 border-line px-2 py-0.5 text-xs uppercase tracking-wider text-blue transition-colors hover:border-blue"
+            >
+              ☰<span className="hidden sm:inline"> Menu</span>
+            </Link>
+          )}
         </span>
-      </span>
-      {!onHome && (
-        <Link
-          to="/"
-          className="rounded-lg border-2 border-line px-2 py-0.5 text-xs uppercase tracking-wider text-blue transition-colors hover:border-blue"
-        >
-          ☰ Menu
-        </Link>
-      )}
-      <span title="Ofensiva" className={`flex items-center gap-1 ${shownStreak ? 'text-orange' : 'text-muted'}`}>
-        🔥 {shownStreak}
-      </span>
-      <span title="Gemas" className="flex items-center gap-1 text-blue">
-        💎 {gems}
-      </span>
-      <span title="XP" className="flex items-center gap-1 text-gold">
-        ⚡ {xp} XP
-      </span>
-      {auth.enabled && auth.user && (
-        <AccountMenu isAnonymous={auth.isAnonymous} name={auth.displayName} avatarUrl={auth.avatarUrl} />
-      )}
+        <span className="flex items-center gap-3 text-sm sm:gap-5">
+          <span title="Ofensiva" className={`flex items-center gap-1 ${shownStreak ? 'text-orange' : 'text-muted'}`}>
+            🔥 {shownStreak}
+          </span>
+          <span title="Gemas" className="flex items-center gap-1 text-blue">
+            💎 {gems}
+          </span>
+          <span title="XP" className="flex items-center gap-1 text-gold">
+            ⚡ {xp}
+            <span className="hidden sm:inline">XP</span>
+          </span>
+        </span>
+        {auth.enabled && auth.user ? (
+          <AccountMenu isAnonymous={auth.isAnonymous} name={auth.displayName} avatarUrl={auth.avatarUrl} />
+        ) : (
+          <span />
+        )}
+      </div>
     </header>
   )
 }

@@ -10,11 +10,13 @@ const ZIGZAG = [0, 44, 70, 44, 0, -44, -70, -44]
 
 export function PathPage() {
   return (
-    <div className="mx-auto min-h-screen max-w-lg pb-24">
+    <div className="min-h-screen pb-24">
       <TopBar />
-      {sections.map((s) => (
-        <SectionPath key={s.id} section={s} />
-      ))}
+      <main className="mx-auto max-w-lg">
+        {sections.map((s) => (
+          <SectionPath key={s.id} section={s} />
+        ))}
+      </main>
     </div>
   )
 }
