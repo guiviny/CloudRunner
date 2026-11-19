@@ -10,11 +10,13 @@ export default defineConfig({
   test: {
     environment: 'node',
     setupFiles: ['src/test/setup.ts'],
+    // os testes nunca falam com o Supabase, mesmo com um .env.local configurado
+    env: { VITE_SUPABASE_URL: '', VITE_SUPABASE_ANON_KEY: '' },
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],
       // A cena 3D precisa de WebGL, que não existe no jsdom; os templates dela são testados à parte.
-      exclude: ['src/**/*.test.{ts,tsx}', 'src/test/**', 'src/main.tsx', 'src/scenes/SceneView.tsx'],
+      exclude: ['src/**/*.test.{ts,tsx}', 'src/test/**', 'src/main.tsx', 'src/scenes/SceneView.tsx', 'src/lib/sync.ts'],
       reporter: ['text-summary', 'html'],
     },
   },

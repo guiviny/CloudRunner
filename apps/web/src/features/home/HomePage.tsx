@@ -53,6 +53,13 @@ export function HomePage() {
           />
         </div>
 
+        <Link
+          to="/ranking"
+          className="mt-5 flex items-center justify-center gap-2 rounded-2xl border-2 border-line bg-surface py-3 font-display text-sm font-extrabold text-gold transition-colors hover:border-gold"
+        >
+          🏆 Ver o ranking
+        </Link>
+
         <p className="mt-8 text-center text-xs font-bold text-muted">
           Dica: leia o tópico no roadmap e depois pratique na trilha. Os tópicos com 🎯 levam direto às questões.
         </p>

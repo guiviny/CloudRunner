@@ -38,7 +38,10 @@ Testes de componente ficam ao lado da página (`*.test.tsx`), começam com `// @
 | `apps/web/src/content/data/roadmap.json` | Tópicos do roadmap e links para materiais gratuitos (validado por `roadmapSchema.ts`)                       |
 | `apps/web/src/features/explain`          | Painel de explicação (texto + 3D com passos)                                                                |
 | `apps/web/src/scenes`                    | Engine 3D: `templates/*` são funções `params → layout`, e o `SceneView` renderiza, destaca e anima o pacote |
-| `apps/web/src/lib/progress.ts`           | Progresso local (zustand + localStorage). Será sincronizado com o Supabase                                  |
+| `apps/web/src/lib/progress.ts`           | Progresso local (zustand + localStorage)                                                                    |
+| `apps/web/src/lib/sync.ts`               | Sincroniza o progresso com o Supabase (sessão anônima, login Google); `mergeProgress.ts` junta os aparelhos |
+| `apps/web/src/features/ranking`          | Ranking (`/ranking`) por XP, só de quem entrou com Google                                                   |
+| `supabase/migrations`                    | Tabela `progress` com RLS e a função `leaderboard()`                                                        |
 | `content/source`                         | PDFs da Escola da Nuvem (fora do git, por direitos autorais)                                                |
 
 ## Adicionando uma cena 3D a uma questão
@@ -73,12 +76,36 @@ O `npm test` falha se um passo referenciar um nó que não existe no template.
 | `rds-multi-az`          | Primária e standby em duas AZs, para replicação e failover                                         |
 | `aws-cli`               | Comando da CLI → API do serviço → recurso                                                          |
 
+## Deploy (Cloudflare Pages + Supabase, plano grátis)
+
+O site é estático no Cloudflare Pages; o Supabase guarda o progresso e o ranking. Não há servidor próprio: a chave publicável do Supabase vai no bundle e quem protege os dados são as policies de RLS de `supabase/migrations`.
+
+Ao abrir o app, o aluno ganha uma sessão anônima e o progresso já sincroniza. Ao clicar em **Salvar** / **Entrar com Google**, a conta Google é vinculada ao mesmo usuário. Se a conta Google já existir (outro aparelho), o app entra nela e mescla o progresso local (`mergeProgress`: melhor resultado de cada lição, união de baús e tópicos). Sem as variáveis `VITE_SUPABASE_*` o app funciona só local, como nos testes e no CI.
+
+O XP é calculado no navegador, então o banco só barra valores absurdos. Para um app de estudos isso basta.
+
+**Supabase** (projeto Free, região São Paulo)
+
+1. SQL Editor: rode `supabase/migrations/0001_init.sql`.
+2. Authentication → Sign In / Providers: ligue **Anonymous sign-ins**, **Manual linking** e o provider **Google** (client id/secret abaixo). Em Attack Protection, ligue o captcha **Cloudflare Turnstile** contra criação em massa de contas anônimas.
+3. Authentication → URL Configuration: Site URL `https://<projeto>.pages.dev`; Redirect URLs `https://<projeto>.pages.dev/**`, `https://*.<projeto>.pages.dev/**` (previews de PR) e `http://localhost:5173/**`.
+
+**Google Cloud**: APIs & Services → Credentials → OAuth client ID (Web), com o redirect `https://<ref>.supabase.co/auth/v1/callback`.
+
+**Cloudflare Pages**: Workers & Pages → Create → Pages → Connect to Git → este repositório.
+
+- Build command `npm run build`, output `apps/web/dist`, root `/` (o Node vem do `.nvmrc`).
+- Variáveis `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` em Production e Preview.
+- Cada push em `main` publica; cada PR ganha uma URL de preview. O CI do GitHub continua só verificando.
+- `apps/web/public/_headers` define cache e cabeçalhos de segurança (CSP). Sem `404.html`, o Pages serve o `index.html` em qualquer rota (SPA).
+
+O Supabase Free pausa o projeto depois de 7 dias sem acesso; reative no painel. Enquanto isso o app segue funcionando com o progresso local.
+
 ## Próximas fases (ver plano)
 
 5. Pipeline de IA: PDF → texto → Claude API (structured outputs) → validação → tela de revisão
-6. Supabase: login, tabelas com RLS, sincronização do progresso
-7. Revisão espaçada dos erros, simulado de 65 questões, mais templates 3D
-8. PWA e deploy
+6. Revisão espaçada dos erros, simulado de 65 questões, mais templates 3D
+7. PWA
 
 ## Licença e conteúdo
 
