@@ -1,3 +1,5 @@
+import type { User } from '@supabase/supabase-js'
+import { fitName, nameError, profileOf } from './account'
 import { mergeProgress } from './mergeProgress'
 import { progressData, selectCorrectAnswers, useProgress, type ProgressData } from './progress'
 import { supabase } from './supabase'
@@ -29,8 +31,17 @@ export function startSync() {
     await push()
   }
 
+  // Copia nome e foto do Google para o user_metadata, que é o que o ranking lê e o aluno edita.
+  const fillProfile = async (user: User) => {
+    if (user.is_anonymous || user.user_metadata?.full_name) return
+    const { name, avatarUrl } = profileOf(user)
+    if (name) await client.auth.updateUser({ data: { full_name: fitName(name), avatar_url: avatarUrl } })
+  }
+
   client.auth.onAuthStateChange((_event, session) => {
-    const id = session?.user.id ?? null
+    const user = session?.user
+    if (user) setTimeout(() => void fillProfile(user))
+    const id = user?.id ?? null
     if (id === userId) return
     userId = id
     pulled = false
@@ -73,4 +84,13 @@ export async function signOut() {
   await supabase.auth.signOut()
   useProgress.getState().reset()
   await supabase.auth.signInAnonymously()
+}
+
+// Devolve a mensagem de erro para a tela, ou null se salvou.
+export async function updateDisplayName(name: string): Promise<string | null> {
+  const invalid = nameError(name)
+  if (invalid) return invalid
+  if (!supabase) return 'Sem conexão com o servidor.'
+  const { error } = await supabase.auth.updateUser({ data: { full_name: name.trim() } })
+  return error ? 'Não foi possível salvar agora. Tente de novo.' : null
 }
