@@ -1,0 +1,899 @@
+{
+  "groups": [
+    {
+      "id": "fundamentos",
+      "title": "Fundamentos de nuvem",
+      "topics": [
+        {
+          "id": "computacao-em-nuvem",
+          "title": "O que é computação em nuvem",
+          "description": "Computação em nuvem é usar servidores, armazenamento e bancos de dados pela internet, sob demanda, pagando só pelo que usar. É a base de tudo o que vem depois no re/Start.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "O que é computação em nuvem?",
+              "url": "https://aws.amazon.com/pt/what-is-cloud-computing/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "course",
+              "title": "AWS Cloud Practitioner Essentials (gratuito)",
+              "url": "https://skillbuilder.aws/learn/94T2BEN85A/aws-cloud-practitioner-essentials",
+              "source": "AWS Skill Builder",
+              "lang": "pt"
+            },
+            {
+              "type": "video",
+              "title": "AWS Certified Cloud Practitioner (CLF-C02): curso completo",
+              "url": "https://www.youtube.com/watch?v=NhDYbskXRgc",
+              "source": "freeCodeCamp",
+              "lang": "en"
+            }
+          ]
+        },
+        {
+          "id": "iaas-paas-saas",
+          "title": "IaaS, PaaS e SaaS",
+          "description": "Os modelos de serviço dizem quanto da pilha a AWS gerencia: em IaaS você cuida do sistema operacional; em PaaS, só da aplicação; em SaaS, apenas usa o software pronto.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "O que é IaaS (infraestrutura como serviço)?",
+              "url": "https://aws.amazon.com/pt/what-is/iaas/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "Tipos de computação em nuvem",
+              "url": "https://docs.aws.amazon.com/pt_br/whitepapers/latest/aws-overview/types-of-cloud-computing.html",
+              "source": "Whitepaper AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "modelos-implantacao",
+          "title": "Nuvem pública, privada e híbrida",
+          "description": "Os modelos de implantação: tudo na nuvem, tudo no local (on-premises) ou uma combinação dos dois ligada por rede.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "Tipos de computação em nuvem",
+              "url": "https://aws.amazon.com/pt/types-of-cloud-computing/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "article",
+              "title": "O que é nuvem híbrida?",
+              "url": "https://aws.amazon.com/pt/what-is/hybrid-cloud/",
+              "source": "AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "vantagens-nuvem",
+          "title": "As 6 vantagens da nuvem",
+          "description": "Trocar gasto fixo por variável, economia de escala, parar de adivinhar capacidade, velocidade e agilidade, parar de gastar com data centers e alcance global em minutos. Cai muito na prova.",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "Seis vantagens da computação em nuvem",
+              "url": "https://docs.aws.amazon.com/pt_br/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html",
+              "source": "Whitepaper AWS",
+              "lang": "pt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "infra-global",
+      "title": "Infraestrutura global AWS",
+      "topics": [
+        {
+          "id": "regioes-azs",
+          "title": "Regiões e zonas de disponibilidade",
+          "description": "Uma região é uma área geográfica com várias zonas de disponibilidade (AZs) isoladas entre si. Espalhar recursos por AZs é a base da alta disponibilidade.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "Regiões e zonas de disponibilidade",
+              "url": "https://aws.amazon.com/pt/about-aws/global-infrastructure/regions_az/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "Infraestrutura global",
+              "url": "https://docs.aws.amazon.com/pt_br/whitepapers/latest/aws-overview/global-infrastructure.html",
+              "source": "Whitepaper AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "edge-locations",
+          "title": "Pontos de presença (edge locations)",
+          "description": "Locais espalhados pelo mundo que deixam o conteúdo perto do usuário. São usados pelo CloudFront e pelo Route 53.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "Infraestrutura global da AWS",
+              "url": "https://aws.amazon.com/pt/about-aws/global-infrastructure/",
+              "source": "AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "well-architected",
+          "title": "AWS Well-Architected Framework",
+          "description": "Os seis pilares de uma boa arquitetura: excelência operacional, segurança, confiabilidade, eficiência de performance, otimização de custos e sustentabilidade.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "AWS Well-Architected",
+              "url": "https://aws.amazon.com/pt/architecture/well-architected/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "Framework AWS Well-Architected",
+              "url": "https://docs.aws.amazon.com/pt_br/wellarchitected/latest/framework/welcome.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "linux",
+      "title": "Linux e linha de comando",
+      "topics": [
+        {
+          "id": "linux-basico",
+          "title": "Comandos básicos do Linux",
+          "description": "Navegar por diretórios, criar, mover e apagar arquivos e ler logs. A maioria das instâncias EC2 roda Linux, e o re/Start dedica um módulo inteiro a isso.",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "O que é o Amazon Linux 2023?",
+              "url": "https://docs.aws.amazon.com/pt_br/linux/al2023/ug/what-is-amazon-linux.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "course",
+              "title": "The Linux command line for beginners",
+              "url": "https://ubuntu.com/tutorials/command-line-for-beginners",
+              "source": "Ubuntu",
+              "lang": "en"
+            },
+            {
+              "type": "video",
+              "title": "Introduction to Linux: curso completo",
+              "url": "https://www.youtube.com/watch?v=sWbUDq4S6Y8",
+              "source": "freeCodeCamp",
+              "lang": "en"
+            }
+          ]
+        },
+        {
+          "id": "linux-permissoes",
+          "title": "Usuários e permissões",
+          "description": "Donos, grupos e as permissões rwx (chmod, chown, sudo). Garantem que cada processo e usuário só acesse o que deve.",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "Gerenciar usuários na instância Linux",
+              "url": "https://docs.aws.amazon.com/pt_br/AWSEC2/latest/UserGuide/managing-users.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "article",
+              "title": "File permissions and attributes",
+              "url": "https://wiki.archlinux.org/title/File_permissions_and_attributes",
+              "source": "ArchWiki",
+              "lang": "en"
+            },
+            {
+              "type": "video",
+              "title": "Linux Operating System: Crash Course",
+              "url": "https://www.youtube.com/watch?v=ROjZy1WbCIA",
+              "source": "freeCodeCamp",
+              "lang": "en"
+            }
+          ]
+        },
+        {
+          "id": "shell-script",
+          "title": "Shell script (Bash)",
+          "description": "Automatizar tarefas repetitivas com scripts Bash: variáveis, condicionais, laços e agendamento com cron.",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "Bash Reference Manual",
+              "url": "https://www.gnu.org/software/bash/manual/bash.html",
+              "source": "GNU",
+              "lang": "en"
+            }
+          ],
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "redes",
+      "title": "Redes",
+      "topics": [
+        {
+          "id": "redes-fundamentos",
+          "title": "Fundamentos de redes (IP, CIDR, OSI)",
+          "description": "Endereços IP, notação CIDR (10.0.0.0/16) e o modelo OSI. Você precisa disso para desenhar sub-redes em uma VPC.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "O que é CIDR?",
+              "url": "https://aws.amazon.com/pt/what-is/cidr/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "article",
+              "title": "O que é o modelo OSI?",
+              "url": "https://aws.amazon.com/pt/what-is/osi-model/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "video",
+              "title": "Computer Networking Course",
+              "url": "https://www.youtube.com/watch?v=qiQR5rTSshw",
+              "source": "freeCodeCamp",
+              "lang": "en"
+            }
+          ]
+        },
+        {
+          "id": "vpc",
+          "title": "Amazon VPC",
+          "description": "Sua rede privada e isolada dentro da AWS. Você define o bloco de IPs, as sub-redes, as tabelas de rotas e os gateways.",
+          "unitId": "u1",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "O que é Amazon VPC?",
+              "url": "https://docs.aws.amazon.com/pt_br/vpc/latest/userguide/what-is-amazon-vpc.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "Sub-redes da VPC",
+              "url": "https://docs.aws.amazon.com/pt_br/vpc/latest/userguide/configure-subnets.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "igw-nat",
+          "title": "Internet Gateway e NAT Gateway",
+          "description": "O Internet Gateway dá acesso de entrada e saída à internet para sub-redes públicas. O NAT Gateway deixa a sub-rede privada sair para a internet sem ficar exposta a ela.",
+          "unitId": "u1",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "Gateways da internet",
+              "url": "https://docs.aws.amazon.com/pt_br/vpc/latest/userguide/VPC_Internet_Gateway.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "Gateways NAT",
+              "url": "https://docs.aws.amazon.com/pt_br/vpc/latest/userguide/vpc-nat-gateway.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "route53",
+          "title": "Amazon Route 53 (DNS)",
+          "description": "O serviço de DNS da AWS: traduz nomes em IPs, registra domínios e faz roteamento por latência, geolocalização ou failover.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "O que é DNS?",
+              "url": "https://aws.amazon.com/pt/route53/what-is-dns/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "O que é o Amazon Route 53?",
+              "url": "https://docs.aws.amazon.com/pt_br/Route53/latest/DeveloperGuide/Welcome.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "cloudfront",
+          "title": "Amazon CloudFront (CDN)",
+          "description": "A rede de entrega de conteúdo da AWS: guarda cópias em cache nos pontos de presença para entregar sites e vídeos com baixa latência.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "O que é uma CDN?",
+              "url": "https://aws.amazon.com/pt/what-is/cdn/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "O que é o Amazon CloudFront?",
+              "url": "https://docs.aws.amazon.com/pt_br/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "seguranca",
+      "title": "Segurança e IAM",
+      "topics": [
+        {
+          "id": "responsabilidade-compartilhada",
+          "title": "Modelo de responsabilidade compartilhada",
+          "description": "A AWS cuida da segurança DA nuvem (hardware, data centers, rede global). Você cuida da segurança NA nuvem (dados, IAM, sistema operacional, firewall).",
+          "unitId": "u2",
+          "resources": [
+            {
+              "type": "article",
+              "title": "Modelo de responsabilidade compartilhada",
+              "url": "https://aws.amazon.com/pt/compliance/shared-responsibility-model/",
+              "source": "AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "iam",
+          "title": "AWS IAM",
+          "description": "Usuários, grupos, funções (roles) e políticas que controlam quem pode fazer o quê. Inclui MFA, privilégio mínimo e o cuidado com o usuário raiz.",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "O que é o IAM?",
+              "url": "https://docs.aws.amazon.com/pt_br/IAM/latest/UserGuide/introduction.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "Práticas recomendadas de segurança no IAM",
+              "url": "https://docs.aws.amazon.com/pt_br/IAM/latest/UserGuide/best-practices.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "sg-nacl",
+          "title": "Security Groups e NACLs",
+          "description": "O security group é stateful e protege a instância. A NACL é stateless, protege a sub-rede e aceita regras de negação.",
+          "unitId": "u2",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "Grupos de segurança",
+              "url": "https://docs.aws.amazon.com/pt_br/vpc/latest/userguide/vpc-security-groups.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "Listas de controle de acesso à rede (NACLs)",
+              "url": "https://docs.aws.amazon.com/pt_br/vpc/latest/userguide/vpc-network-acls.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "computacao",
+      "title": "Computação",
+      "topics": [
+        {
+          "id": "ec2",
+          "title": "Amazon EC2",
+          "description": "Servidores virtuais na nuvem. Você escolhe a AMI, o tipo de instância e o modelo de compra (sob demanda, reservada, Savings Plans ou spot).",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "O que é o Amazon EC2?",
+              "url": "https://docs.aws.amazon.com/pt_br/AWSEC2/latest/UserGuide/concepts.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "article",
+              "title": "Tipos de instância do Amazon EC2",
+              "url": "https://aws.amazon.com/pt/ec2/instance-types/",
+              "source": "AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "elb-autoscaling",
+          "title": "Elastic Load Balancing e Auto Scaling",
+          "description": "O load balancer distribui o tráfego entre instâncias em várias AZs, e o Auto Scaling aumenta ou reduz a quantidade de instâncias conforme a demanda.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "O que é balanceamento de carga?",
+              "url": "https://aws.amazon.com/pt/what-is/load-balancing/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "O que é o Amazon EC2 Auto Scaling?",
+              "url": "https://docs.aws.amazon.com/pt_br/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "lambda",
+          "title": "AWS Lambda (serverless)",
+          "description": "Roda código sem gerenciar servidores, disparado por eventos. Você paga por execução e por tempo de processamento.",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "O que é o AWS Lambda?",
+              "url": "https://docs.aws.amazon.com/pt_br/lambda/latest/dg/welcome.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "article",
+              "title": "Computação sem servidor na AWS",
+              "url": "https://aws.amazon.com/pt/serverless/",
+              "source": "AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "containers",
+          "title": "Contêineres: ECS, EKS e Fargate",
+          "description": "Empacotar a aplicação com suas dependências e rodar em ECS ou EKS. Com o Fargate, a AWS gerencia os servidores por baixo.",
+          "optional": true,
+          "resources": [
+            {
+              "type": "article",
+              "title": "O que é conteinerização?",
+              "url": "https://aws.amazon.com/pt/what-is/containerization/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "O que é o Amazon ECS?",
+              "url": "https://docs.aws.amazon.com/pt_br/AmazonECS/latest/developerguide/Welcome.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "armazenamento",
+      "title": "Armazenamento",
+      "topics": [
+        {
+          "id": "s3",
+          "title": "Amazon S3 e classes de armazenamento",
+          "description": "Armazenamento de objetos com 11 noves de durabilidade. As classes (Standard, IA, Glacier...) trocam custo por tempo de acesso.",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "O que é o Amazon S3?",
+              "url": "https://docs.aws.amazon.com/pt_br/AmazonS3/latest/userguide/Welcome.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "article",
+              "title": "Classes de armazenamento do Amazon S3",
+              "url": "https://aws.amazon.com/pt/s3/storage-classes/",
+              "source": "AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "ebs-efs",
+          "title": "EBS, EFS e tipos de armazenamento",
+          "description": "O EBS é um disco em bloco ligado a uma instância EC2. O EFS é um sistema de arquivos compartilhado entre várias instâncias. Entenda bloco × arquivo × objeto.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "Armazenamento em bloco, arquivo e objeto",
+              "url": "https://aws.amazon.com/pt/compare/the-difference-between-block-file-object-storage/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "O que é o Amazon EBS?",
+              "url": "https://docs.aws.amazon.com/pt_br/ebs/latest/userguide/what-is-ebs.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "O que é o Amazon EFS?",
+              "url": "https://docs.aws.amazon.com/pt_br/efs/latest/ug/whatisefs.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bancos",
+      "title": "Bancos de dados",
+      "topics": [
+        {
+          "id": "rds",
+          "title": "Amazon RDS",
+          "description": "Banco relacional gerenciado (MySQL, PostgreSQL, MariaDB, Oracle, SQL Server). A AWS cuida de patches, backups e hardware.",
+          "unitId": "rds-u1",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "O que é o Amazon RDS?",
+              "url": "https://docs.aws.amazon.com/pt_br/AmazonRDS/latest/UserGuide/Welcome.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "Classes de instância de banco de dados",
+              "url": "https://docs.aws.amazon.com/pt_br/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "rds-backup-multiaz",
+          "title": "Backups e Multi-AZ no RDS",
+          "description": "Backups automáticos com período de retenção, snapshots manuais e a implantação Multi-AZ com standby síncrono e failover automático.",
+          "unitId": "rds-u2",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "Introdução aos backups",
+              "url": "https://docs.aws.amazon.com/pt_br/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "Implantações Multi-AZ",
+              "url": "https://docs.aws.amazon.com/pt_br/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "dynamodb",
+          "title": "Amazon DynamoDB",
+          "description": "Banco NoSQL de chave-valor, serverless, com latência de milissegundos em qualquer escala.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "O que é NoSQL?",
+              "url": "https://aws.amazon.com/pt/nosql/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "O que é o Amazon DynamoDB?",
+              "url": "https://docs.aws.amazon.com/pt_br/amazondynamodb/latest/developerguide/Introduction.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "elasticache",
+          "title": "Amazon ElastiCache",
+          "description": "Cache em memória (Redis, Valkey ou Memcached) para aliviar o banco e acelerar leituras.",
+          "optional": true,
+          "resources": [
+            {
+              "type": "article",
+              "title": "Visão geral de cache",
+              "url": "https://aws.amazon.com/pt/caching/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "O que é o Amazon ElastiCache?",
+              "url": "https://docs.aws.amazon.com/pt_br/AmazonElastiCache/latest/dg/WhatIs.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "automacao",
+      "title": "Automação e monitoramento",
+      "topics": [
+        {
+          "id": "aws-cli",
+          "title": "AWS CLI",
+          "description": "Controlar a AWS pelo terminal: cada comando chama a API do serviço. É a base dos laboratórios do re/Start.",
+          "unitId": "rds-u2",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "O que é a AWS CLI?",
+              "url": "https://docs.aws.amazon.com/pt_br/cli/latest/userguide/cli-chap-welcome.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "Conceitos básicos da AWS CLI",
+              "url": "https://docs.aws.amazon.com/pt_br/cli/latest/userguide/cli-chap-getting-started.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "cloudformation",
+          "title": "AWS CloudFormation (IaC)",
+          "description": "Infraestrutura como código: descreva os recursos em um template YAML/JSON e a AWS cria tudo de forma repetível.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "O que é infraestrutura como código?",
+              "url": "https://aws.amazon.com/pt/what-is/iac/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "O que é o AWS CloudFormation?",
+              "url": "https://docs.aws.amazon.com/pt_br/AWSCloudFormation/latest/UserGuide/Welcome.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "cloudwatch",
+          "title": "Amazon CloudWatch",
+          "description": "Métricas, logs, painéis e alarmes dos seus recursos. É o que avisa quando a CPU passa de 80%.",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "O que é o Amazon CloudWatch?",
+              "url": "https://docs.aws.amazon.com/pt_br/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "cloudtrail",
+          "title": "AWS CloudTrail",
+          "description": "Registra quem fez qual chamada de API, quando e de onde. É a trilha de auditoria da conta.",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "O que é o AWS CloudTrail?",
+              "url": "https://docs.aws.amazon.com/pt_br/awscloudtrail/latest/userguide/cloudtrail-user-guide.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "python",
+      "title": "Python para cloud",
+      "topics": [
+        {
+          "id": "python-basico",
+          "title": "Fundamentos de Python",
+          "description": "Variáveis, tipos, condicionais, laços, funções e arquivos. O re/Start usa Python para automatizar tarefas na nuvem.",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "O tutorial de Python",
+              "url": "https://docs.python.org/pt-br/3/tutorial/index.html",
+              "source": "Python.org",
+              "lang": "pt"
+            },
+            {
+              "type": "video",
+              "title": "Curso Python #01: Seja um Programador",
+              "url": "https://www.youtube.com/watch?v=S9uPNppGsGo&list=PLpwygc0AuGOXJ18fPwPNIeXvzKid_AUkm",
+              "source": "Curso em Vídeo",
+              "lang": "pt"
+            },
+            {
+              "type": "video",
+              "title": "Learn Python: Full Course for Beginners",
+              "url": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+              "source": "freeCodeCamp",
+              "lang": "en"
+            }
+          ]
+        },
+        {
+          "id": "boto3",
+          "title": "Boto3 (SDK da AWS para Python)",
+          "description": "A biblioteca para criar e gerenciar recursos AWS a partir de scripts Python.",
+          "optional": true,
+          "resources": [
+            {
+              "type": "docs",
+              "title": "Boto3 Quickstart",
+              "url": "https://docs.aws.amazon.com/boto3/latest/guide/quickstart.html",
+              "source": "AWS",
+              "lang": "en"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "precos",
+      "title": "Preços e suporte",
+      "topics": [
+        {
+          "id": "modelos-preco",
+          "title": "Como funcionam os preços da AWS",
+          "description": "Pague pelo que usar, pague menos com reserva e pague menos por unidade com mais uso. Inclui o nível gratuito.",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "Como funciona a definição de preço da AWS",
+              "url": "https://docs.aws.amazon.com/pt_br/whitepapers/latest/how-aws-pricing-works/welcome.html",
+              "source": "Whitepaper AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "article",
+              "title": "Nível gratuito da AWS",
+              "url": "https://aws.amazon.com/pt/free/",
+              "source": "AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "ferramentas-custo",
+          "title": "Pricing Calculator, Cost Explorer e Budgets",
+          "description": "Estime antes de criar (Pricing Calculator), analise o que já gastou (Cost Explorer) e receba alertas de orçamento (Budgets).",
+          "resources": [
+            {
+              "type": "article",
+              "title": "AWS Pricing Calculator",
+              "url": "https://calculator.aws/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "Analisar custos com o AWS Cost Explorer",
+              "url": "https://docs.aws.amazon.com/pt_br/cost-management/latest/userguide/ce-what-is.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "docs",
+              "title": "Gerenciar custos com o AWS Budgets",
+              "url": "https://docs.aws.amazon.com/pt_br/cost-management/latest/userguide/budgets-managing-costs.html",
+              "source": "Documentação AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "planos-suporte",
+          "title": "Planos de suporte AWS",
+          "description": "Basic, Developer, Business e Enterprise: tempo de resposta, acesso ao Trusted Advisor e gerente técnico de conta (TAM).",
+          "resources": [
+            {
+              "type": "article",
+              "title": "Comparar planos do AWS Support",
+              "url": "https://aws.amazon.com/pt/premiumsupport/plans/",
+              "source": "AWS",
+              "lang": "pt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "prova",
+      "title": "Prova CLF-C02",
+      "topics": [
+        {
+          "id": "guia-exame",
+          "title": "Guia oficial do exame",
+          "description": "Os quatro domínios da prova e o peso de cada um: conceitos de nuvem, segurança e conformidade, tecnologia e serviços, e cobrança e suporte.",
+          "resources": [
+            {
+              "type": "docs",
+              "title": "Guia do exame AWS Certified Cloud Practitioner (CLF-C02)",
+              "url": "https://docs.aws.amazon.com/pt_br/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html",
+              "source": "AWS Certification",
+              "lang": "pt"
+            },
+            {
+              "type": "article",
+              "title": "AWS Certified Cloud Practitioner",
+              "url": "https://aws.amazon.com/pt/certification/certified-cloud-practitioner/",
+              "source": "AWS",
+              "lang": "pt"
+            }
+          ]
+        },
+        {
+          "id": "aws-restart",
+          "title": "Sobre o programa AWS re/Start",
+          "description": "O programa gratuito de capacitação em nuvem que termina com o voucher para a prova Cloud Practitioner.",
+          "resources": [
+            {
+              "type": "article",
+              "title": "AWS re/Start",
+              "url": "https://aws.amazon.com/pt/training/restart/",
+              "source": "AWS",
+              "lang": "pt"
+            },
+            {
+              "type": "article",
+              "title": "Roadmap AWS (referência)",
+              "url": "https://roadmap.sh/aws",
+              "source": "roadmap.sh",
+              "lang": "en"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

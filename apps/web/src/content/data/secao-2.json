@@ -1,0 +1,1013 @@
+{
+  "id": "secao-2",
+  "number": 2,
+  "title": "Bancos de dados: Amazon RDS",
+  "units": [
+    {
+      "id": "rds-u1",
+      "title": "Amazon RDS: banco relacional gerenciado",
+      "chestAfter": 0,
+      "lessons": [
+        {
+          "id": "rds-u1-l1",
+          "title": "O que é o Amazon RDS",
+          "type": "learn",
+          "questionIds": ["rds-q1", "rds-q2", "rds-q3", "rds-q4"]
+        },
+        {
+          "id": "rds-u1-l2",
+          "title": "Instâncias, classes e armazenamento",
+          "type": "practice",
+          "questionIds": ["rds-q5", "rds-q6", "rds-q7", "rds-q8", "rds-q9"]
+        }
+      ]
+    },
+    {
+      "id": "rds-u2",
+      "title": "Backups e alta disponibilidade",
+      "chestAfter": 1,
+      "lessons": [
+        {
+          "id": "rds-u2-l1",
+          "title": "Backups automáticos e manuais",
+          "type": "learn",
+          "questionIds": ["rds-q10", "rds-q11", "rds-q12"]
+        },
+        {
+          "id": "rds-u2-l2",
+          "title": "Multi-AZ e segurança",
+          "type": "practice",
+          "questionIds": ["rds-q13", "rds-q14", "rds-q15", "rds-q16", "rds-q17"]
+        },
+        {
+          "id": "rds-u2-l3",
+          "title": "Revisão: RDS na AWS CLI",
+          "type": "review",
+          "questionIds": ["rds-q18", "rds-q19", "rds-q2", "rds-q15"]
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "rds-q1",
+      "examDomain": "technology",
+      "difficulty": 1,
+      "kind": "single",
+      "stem": "O que é o Amazon RDS?",
+      "options": [
+        { "id": "a", "text": "Um serviço de banco de dados NoSQL de chave-valor, sem servidor" },
+        {
+          "id": "b",
+          "text": "Um serviço gerenciado que configura, opera e dimensiona um banco de dados relacional na nuvem"
+        },
+        { "id": "c", "text": "Um serviço de armazenamento de objetos para arquivos como imagens e vídeos" },
+        { "id": "d", "text": "Uma máquina virtual em que você instala e administra o banco de dados por conta própria" }
+      ],
+      "correct": ["b"],
+      "explanation": {
+        "summary": "Amazon RDS é o serviço GERENCIADO de banco de dados RELACIONAL da AWS.",
+        "whyCorrect": "O RDS configura, opera e dimensiona bancos relacionais sem que você precise fazer a administração contínua. Ele automatiza tarefas demoradas como provisionamento, aplicação de patches e backups, e você cuida dos dados e da otimização do aplicativo.",
+        "whyOthersWrong": {
+          "a": "Essa é a descrição do Amazon DynamoDB, que é NoSQL. O RDS trabalha com bancos relacionais (tabelas e SQL).",
+          "c": "Armazenamento de objetos é o papel do Amazon S3, não de um banco de dados relacional.",
+          "d": "Instalar e administrar o banco por conta própria em uma instância EC2 é a solução NÃO gerenciada, justamente o que o RDS evita."
+        },
+        "scene": {
+          "template": "managed-db",
+          "params": {},
+          "steps": [
+            {
+              "caption": "Os dois lados rodam o mesmo banco relacional. A diferença é quem cuida de cada camada.",
+              "focus": []
+            },
+            {
+              "caption": "Banco instalado no EC2: a AWS cuida só do hardware. SO, patches, backups e alta disponibilidade ficam com você.",
+              "focus": ["ec2-os", "ec2-patch", "ec2-backup", "ec2-ha", "ec2-data"]
+            },
+            {
+              "caption": "No Amazon RDS, a AWS configura, opera e dimensiona: SO, patches, backups e alta disponibilidade passam para ela.",
+              "focus": ["rds-hw", "rds-os", "rds-patch", "rds-backup", "rds-ha"]
+            },
+            {
+              "caption": "Você fica só com o que importa para o negócio: os dados, o esquema e a otimização das consultas.",
+              "focus": ["rds-data"]
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q2",
+      "examDomain": "cloud-concepts",
+      "difficulty": 2,
+      "kind": "scenario",
+      "context": "Uma startup roda um banco MySQL instalado em uma instância EC2. A equipe pequena gasta muitas horas por semana aplicando patches, configurando backups e cuidando do servidor, e quer dedicar esse tempo a melhorar o aplicativo.",
+      "stem": "Qual é a melhor recomendação?",
+      "options": [
+        { "id": "a", "text": "Trocar a instância EC2 por uma de classe maior" },
+        { "id": "b", "text": "Levar o banco de volta para um servidor físico no escritório" },
+        { "id": "c", "text": "Migrar o banco para o Amazon RDS for MySQL" },
+        {
+          "id": "d",
+          "text": "Exportar as tabelas para arquivos no Amazon S3 e consultá-los diretamente pelo aplicativo"
+        }
+      ],
+      "correct": ["c"],
+      "explanation": {
+        "summary": "Para tirar a carga de administração do banco, use um serviço gerenciado: o Amazon RDS.",
+        "whyCorrect": "Com o RDS, a AWS automatiza tarefas administrativas demoradas, como patches do mecanismo, backups automáticos e provisionamento. O motor continua sendo MySQL, então o aplicativo segue funcionando com as mesmas ferramentas, e a equipe fica livre para otimizar o aplicativo.",
+        "whyOthersWrong": {
+          "a": "Uma instância maior melhora o desempenho, mas a equipe continuaria responsável por patches, backups e manutenção.",
+          "b": "Um servidor local aumenta o trabalho operacional (hardware, energia, refrigeração) em vez de reduzi-lo.",
+          "d": "O S3 é armazenamento de objetos, não um banco relacional; o aplicativo perderia transações e consultas SQL."
+        },
+        "scene": {
+          "template": "managed-db",
+          "params": {},
+          "steps": [
+            {
+              "caption": "Hoje a equipe cuida de quase toda a pilha do MySQL no EC2.",
+              "focus": ["ec2-os", "ec2-patch", "ec2-backup", "ec2-ha", "ec2-data"]
+            },
+            {
+              "caption": "Uma instância EC2 maior não muda nada disso: patches e backups continuam com a equipe.",
+              "focus": ["ec2-os", "ec2-ha"],
+              "alert": ["ec2-patch", "ec2-backup"]
+            },
+            {
+              "caption": "No RDS for MySQL, SO, patches, backups e alta disponibilidade viram tarefas automáticas da AWS.",
+              "focus": ["rds-os", "rds-patch", "rds-backup", "rds-ha"]
+            },
+            {
+              "caption": "O tempo da equipe vai para os dados e para otimizar o aplicativo, como ela queria.",
+              "focus": ["rds-data"]
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q3",
+      "examDomain": "technology",
+      "difficulty": 1,
+      "kind": "multi",
+      "stem": "Quais TRÊS mecanismos de banco de dados são compatíveis com o Amazon RDS? (Escolha 3.)",
+      "options": [
+        { "id": "a", "text": "PostgreSQL" },
+        { "id": "b", "text": "Amazon DynamoDB" },
+        { "id": "c", "text": "Oracle" },
+        { "id": "d", "text": "MongoDB" },
+        { "id": "e", "text": "MariaDB" }
+      ],
+      "correct": ["a", "c", "e"],
+      "explanation": {
+        "summary": "O RDS é compatível com seis mecanismos: MySQL, Amazon Aurora, Microsoft SQL Server, PostgreSQL, MariaDB e Oracle.",
+        "whyCorrect": "PostgreSQL, Oracle e MariaDB estão na lista dos seis mecanismos relacionais do RDS. Uma forma de lembrar: três de código aberto (MySQL, PostgreSQL, MariaDB), dois comerciais (Oracle, SQL Server) e um da própria AWS (Aurora).",
+        "whyOthersWrong": {
+          "b": "O DynamoDB é um serviço NoSQL separado, não um mecanismo do RDS.",
+          "d": "O MongoDB é um banco de documentos (NoSQL) e não é um dos mecanismos do RDS."
+        },
+        "scene": {
+          "template": "catalog",
+          "params": {
+            "groups": [
+              {
+                "id": "rds",
+                "label": "Amazon RDS · 6 mecanismos relacionais",
+                "tone": "aws",
+                "items": [
+                  { "id": "mysql", "label": "MySQL" },
+                  { "id": "aurora", "label": "Amazon Aurora" },
+                  { "id": "sqlserver", "label": "Microsoft SQL Server" },
+                  { "id": "postgres", "label": "PostgreSQL" },
+                  { "id": "mariadb", "label": "MariaDB" },
+                  { "id": "oracle", "label": "Oracle" }
+                ]
+              },
+              {
+                "id": "nosql",
+                "label": "Fora do RDS · NoSQL",
+                "tone": "neutral",
+                "items": [
+                  { "id": "dynamodb", "label": "Amazon DynamoDB", "sublabel": "chave-valor" },
+                  { "id": "mongodb", "label": "MongoDB", "sublabel": "documentos" }
+                ]
+              }
+            ]
+          },
+          "steps": [
+            {
+              "caption": "O Amazon RDS executa seis mecanismos de banco relacional.",
+              "focus": ["rds", "mysql", "aurora", "sqlserver", "postgres", "mariadb", "oracle"]
+            },
+            {
+              "caption": "Três de código aberto: MySQL, PostgreSQL e MariaDB.",
+              "focus": ["mysql", "postgres", "mariadb"]
+            },
+            {
+              "caption": "Dois comerciais, Oracle e Microsoft SQL Server, e um da própria AWS, o Amazon Aurora.",
+              "focus": ["oracle", "sqlserver", "aurora"]
+            },
+            {
+              "caption": "DynamoDB e MongoDB são NoSQL: ficam fora da lista do RDS.",
+              "focus": ["nosql"],
+              "alert": ["dynamodb", "mongodb"]
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q4",
+      "examDomain": "technology",
+      "difficulty": 2,
+      "kind": "scenario",
+      "context": "Uma loja virtual precisa guardar clientes, pedidos e itens de pedido. Os dados são relacionados entre si, as consultas usam JOINs em SQL e um pedido só pode ser gravado se o pagamento e a baixa no estoque ocorrerem juntos, em uma única transação.",
+      "stem": "Qual serviço AWS é o mais adequado para essa carga de trabalho?",
+      "options": [
+        { "id": "a", "text": "Amazon S3" },
+        { "id": "b", "text": "Amazon DynamoDB" },
+        { "id": "c", "text": "Amazon EBS anexado a uma instância EC2 sem banco instalado" },
+        { "id": "d", "text": "Amazon RDS" }
+      ],
+      "correct": ["d"],
+      "explanation": {
+        "summary": "Tabelas relacionadas, SQL com JOINs e transações são o caso de uso típico de um banco relacional como o RDS.",
+        "whyCorrect": "O RDS executa bancos relacionais (MySQL, PostgreSQL etc.), que garantem transações e integridade entre tabelas. É o caso de uso clássico de sistemas de pedidos, ERPs, CRMs e aplicações web transacionais.",
+        "whyOthersWrong": {
+          "a": "O S3 armazena objetos (arquivos). Ele não executa consultas SQL com JOINs nem transações entre registros.",
+          "b": "O DynamoDB é NoSQL de chave-valor. Ele é ótimo para acessos simples em escala massiva, mas não é a escolha natural quando o modelo depende de JOINs em SQL.",
+          "c": "O EBS é apenas um disco. Sem um banco instalado e administrado por você, ele não oferece SQL nem transações."
+        },
+        "scene": {
+          "template": "catalog",
+          "params": {
+            "source": "Loja virtual",
+            "sourceSublabel": "pedido + pagamento + estoque",
+            "groups": [
+              {
+                "id": "rel",
+                "label": "Relacional",
+                "tone": "aws",
+                "items": [{ "id": "rds", "label": "Amazon RDS", "sublabel": "SQL + transações" }]
+              },
+              {
+                "id": "obj",
+                "label": "Objetos",
+                "tone": "neutral",
+                "items": [{ "id": "s3", "label": "Amazon S3", "sublabel": "arquivos", "shape": "box" }]
+              },
+              {
+                "id": "kv",
+                "label": "NoSQL",
+                "tone": "neutral",
+                "items": [{ "id": "dynamodb", "label": "DynamoDB", "sublabel": "chave-valor" }]
+              },
+              {
+                "id": "blk",
+                "label": "Bloco",
+                "tone": "neutral",
+                "items": [{ "id": "ebs", "label": "Amazon EBS", "sublabel": "só um disco", "shape": "box" }]
+              }
+            ]
+          },
+          "steps": [
+            {
+              "caption": "O pedido precisa gravar pagamento e baixa de estoque juntos: uma transação sobre tabelas relacionadas.",
+              "focus": ["source"]
+            },
+            {
+              "caption": "O RDS executa um banco relacional, com JOINs em SQL e transações garantidas.",
+              "focus": ["source", "rel", "rds"],
+              "packet": { "path": ["source", "rds"] }
+            },
+            {
+              "caption": "S3 guarda arquivos, DynamoDB é chave-valor e EBS é só um disco: nenhum entrega SQL com transações pronto para usar.",
+              "focus": ["source", "s3", "dynamodb", "ebs"],
+              "packet": { "path": ["source", "s3"], "blocked": true }
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q5",
+      "examDomain": "technology",
+      "difficulty": 1,
+      "kind": "truefalse",
+      "stem": "Verdadeiro ou falso: uma única instância de banco de dados do Amazon RDS pode conter vários bancos de dados criados pelo usuário.",
+      "options": [
+        { "id": "v", "text": "Verdadeiro" },
+        { "id": "f", "text": "Falso" }
+      ],
+      "correct": ["v"],
+      "explanation": {
+        "summary": "A instância de banco de dados é um ambiente isolado que pode hospedar VÁRIOS bancos de dados.",
+        "whyCorrect": "A instância de banco de dados é o elemento fundamental do RDS. Ela é um ambiente de banco de dados isolado na nuvem, pode conter vários bancos criados pelo usuário e é acessada com as mesmas ferramentas de um banco independente.",
+        "whyOthersWrong": {
+          "f": "Não há limite de um banco por instância: você pode criar vários bancos dentro da mesma instância, como em um servidor MySQL comum."
+        },
+        "scene": {
+          "template": "rds-instance",
+          "params": {},
+          "steps": [
+            {
+              "caption": "A instância de banco de dados é um ambiente de banco isolado na nuvem.",
+              "focus": ["instance"]
+            },
+            {
+              "caption": "Dentro dela, o mesmo mecanismo MySQL hospeda vários bancos criados por você.",
+              "focus": ["engine", "db-1", "db-2", "db-3"]
+            },
+            {
+              "caption": "O aplicativo se conecta ao endpoint da instância e usa o banco que quiser, como em um MySQL comum.",
+              "focus": ["client", "engine", "db-2"],
+              "packet": { "path": ["client", "engine", "db-2"] }
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q6",
+      "examDomain": "technology",
+      "difficulty": 2,
+      "kind": "single",
+      "stem": "Ao criar uma instância do Amazon RDS, o que é definido pela CLASSE da instância de banco de dados?",
+      "options": [
+        { "id": "a", "text": "CPU, memória e desempenho de rede" },
+        { "id": "b", "text": "O tipo de armazenamento: magnético, SSD de uso geral ou IOPS provisionado" },
+        { "id": "c", "text": "O mecanismo de banco de dados, como MySQL ou Oracle" },
+        { "id": "d", "text": "A zona de disponibilidade em que a instância será executada" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "summary": "Classe = capacidade de processamento (CPU, memória e rede). Armazenamento = tipo de disco.",
+        "whyCorrect": "Os recursos de uma instância de banco de dados são determinados por sua classe: CPU, memória e desempenho de rede. Combinando classe e armazenamento, você ajusta desempenho e custo às necessidades do banco.",
+        "whyOthersWrong": {
+          "b": "O tipo de armazenamento é uma escolha separada, determinada pelo tipo de disco, e não pela classe.",
+          "c": "O mecanismo é a primeira escolha ao criar a instância, mas é independente da classe.",
+          "d": "A zona de disponibilidade é uma configuração de rede e de disponibilidade, não faz parte da classe."
+        },
+        "scene": {
+          "template": "rds-instance",
+          "params": { "classLabel": "Classe: db.m5.large" },
+          "steps": [
+            {
+              "caption": "A classe da instância define a capacidade de processamento.",
+              "focus": ["class", "cpu", "mem", "net"]
+            },
+            {
+              "caption": "CPU, memória e desempenho de rede: os três vêm da classe escolhida.",
+              "focus": ["cpu", "mem", "net"]
+            },
+            {
+              "caption": "O tipo de armazenamento é outra escolha, feita pelo tipo de disco.",
+              "focus": ["magnetic", "gp-ssd", "piops"]
+            },
+            { "caption": "O mecanismo também é escolhido à parte, logo no início da criação.", "focus": ["engine"] }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q7",
+      "examDomain": "technology",
+      "difficulty": 2,
+      "kind": "scenario",
+      "context": "Um sistema financeiro processa milhares de transações por segundo. O banco precisa de desempenho de E/S alto, consistente e com baixa latência, e a equipe quer especificar exatamente a taxa de operações de E/S que o armazenamento deve entregar.",
+      "stem": "Qual tipo de armazenamento do Amazon RDS atende melhor a esse requisito?",
+      "options": [
+        { "id": "a", "text": "Magnético" },
+        { "id": "b", "text": "SSD de uso geral" },
+        { "id": "c", "text": "IOPS provisionado" },
+        { "id": "d", "text": "Aumentar o período de retenção de backup" }
+      ],
+      "correct": ["c"],
+      "explanation": {
+        "summary": "Carga intensa de E/S com desempenho previsível pede armazenamento com IOPS provisionado.",
+        "whyCorrect": "No armazenamento com IOPS provisionado, você define a quantidade de operações de E/S por segundo que o disco deve sustentar. Ele foi feito para cargas transacionais (OLTP) intensivas e sensíveis à latência.",
+        "whyOthersWrong": {
+          "a": "O magnético é a opção mais antiga, de menor desempenho, e serve apenas para compatibilidade com cargas leves.",
+          "b": "O SSD de uso geral é econômico e atende à maioria das cargas, mas é pensado para uso geral, não para E/S intensa e garantida.",
+          "d": "A retenção de backup define por quanto tempo os backups são guardados e não influencia o desempenho do disco."
+        },
+        "scene": {
+          "template": "rds-instance",
+          "params": {},
+          "steps": [
+            {
+              "caption": "Três tipos de armazenamento, cada um com desempenho e preço diferentes.",
+              "focus": ["magnetic", "gp-ssd", "piops"]
+            },
+            {
+              "caption": "Magnético é legado. SSD de uso geral é econômico e atende à maioria das cargas.",
+              "focus": ["magnetic", "gp-ssd"]
+            },
+            {
+              "caption": "Com IOPS provisionado, você define quantas operações de E/S por segundo o disco entrega: ideal para milhares de transações.",
+              "focus": ["engine", "piops"],
+              "packet": { "path": ["engine", "piops"] }
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q8",
+      "examDomain": "technology",
+      "difficulty": 1,
+      "kind": "single",
+      "stem": "No console do Amazon RDS, qual método de criação permite definir TODAS as opções de configuração, incluindo disponibilidade, segurança, backups e manutenção?",
+      "options": [
+        { "id": "a", "text": "Criação fácil" },
+        { "id": "b", "text": "Restaurar a partir de um snapshot" },
+        { "id": "c", "text": "Criar uma réplica de leitura" },
+        { "id": "d", "text": "Criação padrão" }
+      ],
+      "correct": ["d"],
+      "explanation": {
+        "summary": "Criação padrão = você define tudo. Criação fácil = configurações recomendadas de melhores práticas.",
+        "whyCorrect": "A criação padrão expõe todas as opções de configuração, como disponibilidade, segurança, backups e manutenção, para que você decida cada uma delas.",
+        "whyOthersWrong": {
+          "a": "A criação fácil aplica configurações recomendadas de melhores práticas. Algumas opções podem ser alteradas depois, mas você não define todas na criação.",
+          "b": "Restaurar um snapshot cria uma instância a partir de um backup existente; não é o método de criação que expõe todas as opções do zero.",
+          "c": "Uma réplica de leitura é uma cópia de uma instância existente, não um método para criar e configurar uma instância nova."
+        },
+        "scene": {
+          "template": "catalog",
+          "params": {
+            "groups": [
+              {
+                "id": "easy",
+                "label": "Criação fácil · melhores práticas",
+                "tone": "public",
+                "items": [
+                  { "id": "e-engine", "label": "Mecanismo", "sublabel": "você escolhe", "shape": "box" },
+                  { "id": "e-size", "label": "Tamanho", "sublabel": "você escolhe", "shape": "box" },
+                  { "id": "e-rest", "label": "Demais opções", "sublabel": "padrão recomendado", "shape": "box" }
+                ]
+              },
+              {
+                "id": "std",
+                "label": "Criação padrão · você define tudo",
+                "tone": "aws",
+                "items": [
+                  { "id": "s-avail", "label": "Disponibilidade", "shape": "box" },
+                  { "id": "s-sec", "label": "Segurança", "shape": "box" },
+                  { "id": "s-backup", "label": "Backups", "shape": "box" },
+                  { "id": "s-maint", "label": "Manutenção", "shape": "box" },
+                  { "id": "s-engine", "label": "Mecanismo", "shape": "box" },
+                  { "id": "s-storage", "label": "Armazenamento", "shape": "box" }
+                ]
+              }
+            ]
+          },
+          "steps": [
+            {
+              "caption": "Na criação fácil, o console aplica as configurações recomendadas de melhores práticas.",
+              "focus": ["easy", "e-engine", "e-size", "e-rest"]
+            },
+            {
+              "caption": "Algumas dessas opções podem ser alteradas depois que o banco é criado.",
+              "focus": ["e-rest"]
+            },
+            {
+              "caption": "Na criação padrão, você define cada opção: disponibilidade, segurança, backups e manutenção.",
+              "focus": ["std", "s-avail", "s-sec", "s-backup", "s-maint"]
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q9",
+      "examDomain": "technology",
+      "difficulty": 1,
+      "kind": "truefalse",
+      "stem": "Verdadeiro ou falso: depois de criar uma instância do Amazon RDS for MySQL, é obrigatório usar uma ferramenta exclusiva da AWS para se conectar a ela, pois utilitários padrão como o MySQL Workbench não funcionam.",
+      "options": [
+        { "id": "v", "text": "Verdadeiro" },
+        { "id": "f", "text": "Falso" }
+      ],
+      "correct": ["f"],
+      "explanation": {
+        "summary": "O RDS roda o mecanismo de verdade: você se conecta com as ferramentas padrão dele.",
+        "whyCorrect": "Uma instância RDS for MySQL é acessada pelo endpoint dela com os mesmos utilitários e aplicativos usados em um MySQL independente, como o MySQL Workbench ou o cliente mysql.",
+        "whyOthersWrong": {
+          "v": "Não existe ferramenta exclusiva obrigatória. A compatibilidade com as ferramentas padrão é uma das vantagens do RDS, porque facilita migrar aplicativos existentes."
+        },
+        "scene": {
+          "template": "rds-instance",
+          "params": { "clientLabel": "MySQL Workbench" },
+          "steps": [
+            { "caption": "O RDS executa o próprio mecanismo MySQL.", "focus": ["engine"] },
+            {
+              "caption": "O MySQL Workbench se conecta ao endpoint da instância, como faria com qualquer MySQL.",
+              "focus": ["client", "instance", "engine"],
+              "packet": { "path": ["client", "engine", "db-1"] }
+            },
+            {
+              "caption": "Qualquer ferramenta compatível funciona: o cliente mysql, o Workbench ou o seu aplicativo.",
+              "focus": ["client", "db-1", "db-2", "db-3"]
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q10",
+      "examDomain": "technology",
+      "difficulty": 1,
+      "kind": "single",
+      "stem": "O que os backups AUTOMÁTICOS do Amazon RDS incluem?",
+      "options": [
+        { "id": "a", "text": "Uma cópia síncrona contínua em outra zona de disponibilidade" },
+        { "id": "b", "text": "Snapshots diários completos e logs de transação, feitos durante a janela de backup" },
+        { "id": "c", "text": "Apenas os snapshots que o administrador cria manualmente" },
+        { "id": "d", "text": "Uma exportação diária das tabelas em CSV para um bucket S3 do cliente" }
+      ],
+      "correct": ["b"],
+      "explanation": {
+        "summary": "Backup automático = snapshot diário + logs de transação, na janela de backup, guardados pelo período de retenção.",
+        "whyCorrect": "Como serviço gerenciado, o RDS faz backups periódicos automaticamente: um snapshot do volume durante a janela de backup especificada, mais os logs de transação. Eles são mantidos de acordo com o período de retenção configurado.",
+        "whyOthersWrong": {
+          "a": "A cópia síncrona em outra AZ é a implantação Multi-AZ, um recurso de alta disponibilidade e não de backup.",
+          "c": "Snapshots criados pelo administrador são os backups MANUAIS, a outra opção de backup.",
+          "d": "O backup automático não é uma exportação em CSV; é um snapshot do volume de armazenamento da instância."
+        },
+        "scene": {
+          "template": "rds-backup",
+          "params": {},
+          "steps": [
+            {
+              "caption": "Todo dia, na janela de backup, o RDS tira um snapshot do volume da instância.",
+              "focus": ["db", "snap-inc-3"],
+              "packet": { "path": ["db", "snap-inc-3"] }
+            },
+            {
+              "caption": "Os logs de transação também são guardados, continuamente.",
+              "focus": ["db", "logs"],
+              "packet": { "path": ["db", "logs"] }
+            },
+            {
+              "caption": "Snapshots e logs ficam guardados pelo período de retenção configurado.",
+              "focus": ["retention", "snap-full", "snap-inc-1", "snap-inc-2", "snap-inc-3", "logs"]
+            },
+            { "caption": "O snapshot manual é a outra opção de backup: você cria quando quiser.", "focus": ["manual"] }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q11",
+      "examDomain": "technology",
+      "difficulty": 2,
+      "kind": "scenario",
+      "context": "O gerente financeiro está preocupado: se o RDS faz um snapshot por dia de um banco de 500 GB, o armazenamento de backup cresceria 500 GB todos os dias.",
+      "stem": "Qual afirmação explica corretamente como funcionam esses snapshots?",
+      "options": [
+        {
+          "id": "a",
+          "text": "O primeiro snapshot contém todos os dados; os seguintes são incrementais e guardam só o que mudou desde o snapshot mais recente"
+        },
+        { "id": "b", "text": "Cada snapshot é uma cópia completa e independente do banco inteiro" },
+        { "id": "c", "text": "Os snapshots guardam apenas os logs de transação, nunca os dados" },
+        { "id": "d", "text": "O RDS mantém só o snapshot mais recente e apaga os anteriores imediatamente" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "summary": "Snapshots do RDS são incrementais: só o primeiro é completo.",
+        "whyCorrect": "O primeiro snapshot de uma instância contém todos os dados. Os snapshots seguintes registram apenas os blocos alterados desde o snapshot mais recente, o que reduz o tempo de backup e o espaço usado.",
+        "whyOthersWrong": {
+          "b": "Se cada snapshot fosse completo, o custo cresceria exatamente como o gerente temia. Não é assim que o RDS funciona.",
+          "c": "O snapshot é do volume de armazenamento, ou seja, contém os dados. Os logs de transação são guardados à parte, no backup automático.",
+          "d": "Os backups automáticos são mantidos durante todo o período de retenção configurado, não só o último."
+        },
+        "scene": {
+          "template": "rds-backup",
+          "params": {},
+          "steps": [
+            {
+              "caption": "O primeiro snapshot copia todos os dados da instância.",
+              "focus": ["db", "snap-full"],
+              "packet": { "path": ["db", "snap-full"] }
+            },
+            {
+              "caption": "Os seguintes guardam só os blocos que mudaram desde o snapshot mais recente.",
+              "focus": ["db", "snap-inc-1", "snap-inc-2", "snap-inc-3"],
+              "packet": { "path": ["db", "snap-inc-2"] }
+            },
+            {
+              "caption": "Por isso o backup não cresce 500 GB por dia: cresce só o volume de mudanças.",
+              "focus": ["snap-full", "snap-inc-1", "snap-inc-2", "snap-inc-3"]
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q12",
+      "examDomain": "technology",
+      "difficulty": 2,
+      "kind": "scenario",
+      "context": "Antes de uma grande alteração no esquema do banco, a equipe quer um backup que fique guardado até que ela mesma decida apagá-lo, independentemente do período de retenção dos backups automáticos.",
+      "stem": "O que a equipe deve fazer?",
+      "options": [
+        { "id": "a", "text": "Confiar no backup automático da próxima janela de backup" },
+        { "id": "b", "text": "Ativar a implantação Multi-AZ" },
+        { "id": "c", "text": "Criar um snapshot manual da instância" },
+        { "id": "d", "text": "Trocar a classe da instância por uma maior" }
+      ],
+      "correct": ["c"],
+      "explanation": {
+        "summary": "Para um ponto de restauração que você controla, crie um snapshot MANUAL.",
+        "whyCorrect": "O snapshot manual é criado quando você quiser, por exemplo logo antes de uma mudança arriscada. Ele não segue o período de retenção: permanece até que você o exclua.",
+        "whyOthersWrong": {
+          "a": "Os backups automáticos são apagados quando vencem o período de retenção, e o próximo pode acontecer só depois da mudança.",
+          "b": "O Multi-AZ replica as alterações de forma síncrona. Se o esquema for quebrado, o erro também vai para a instância em espera; ele não substitui um backup.",
+          "d": "Mudar a classe altera CPU e memória e não cria nenhum backup."
+        },
+        "scene": {
+          "template": "rds-backup",
+          "params": {},
+          "steps": [
+            {
+              "caption": "Os backups automáticos ficam dentro do período de retenção.",
+              "focus": ["retention", "snap-full", "snap-inc-1", "snap-inc-2", "snap-inc-3"]
+            },
+            {
+              "caption": "Quando vencem a retenção, eles são apagados automaticamente.",
+              "focus": [],
+              "alert": ["snap-old"]
+            },
+            {
+              "caption": "Antes da mudança de esquema, crie um snapshot manual.",
+              "focus": ["db", "manual"],
+              "packet": { "path": ["db", "manual"] }
+            },
+            { "caption": "Ele não segue a retenção: continua guardado até você excluir.", "focus": ["manual"] }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q13",
+      "examDomain": "technology",
+      "difficulty": 1,
+      "kind": "single",
+      "stem": "O que acontece quando você ativa a implantação Multi-AZ em uma instância do Amazon RDS?",
+      "options": [
+        { "id": "a", "text": "É criada uma réplica assíncrona em outra região da AWS" },
+        { "id": "b", "text": "É criada uma segunda instância na mesma zona de disponibilidade para dividir a carga" },
+        { "id": "c", "text": "O RDS passa a gerar um snapshot a cada hora no Amazon S3" },
+        {
+          "id": "d",
+          "text": "É criada automaticamente uma instância em espera em outra zona de disponibilidade, na mesma VPC, com replicação síncrona"
+        }
+      ],
+      "correct": ["d"],
+      "explanation": {
+        "summary": "Multi-AZ = cópia em espera em OUTRA AZ, mesma VPC, replicação SÍNCRONA.",
+        "whyCorrect": "Na implantação Multi-AZ, o RDS cria uma cópia em espera da instância em outra zona de disponibilidade da mesma VPC. Depois da cópia inicial completa, cada transação é replicada de forma síncrona para a instância em espera.",
+        "whyOthersWrong": {
+          "a": "O Multi-AZ fica na mesma região, em outra AZ, e a replicação é síncrona. Réplicas assíncronas são outro recurso.",
+          "b": "Na mesma AZ não haveria proteção contra a falha da zona, e a instância em espera não divide a carga.",
+          "c": "Snapshots fazem parte dos backups, não da implantação Multi-AZ."
+        },
+        "scene": {
+          "template": "rds-multi-az",
+          "params": {},
+          "steps": [
+            {
+              "caption": "Sem Multi-AZ, existe uma única instância primária, na zona de disponibilidade 1.",
+              "focus": ["az-1", "primary"]
+            },
+            {
+              "caption": "Com Multi-AZ, o RDS cria sozinho uma instância em espera na zona 2, na mesma VPC.",
+              "focus": ["vpc", "az-2", "standby"]
+            },
+            {
+              "caption": "Cada gravação na primária é replicada de forma síncrona para a instância em espera.",
+              "focus": ["primary", "standby"],
+              "packet": { "path": ["primary", "standby"] }
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q14",
+      "examDomain": "technology",
+      "difficulty": 2,
+      "kind": "truefalse",
+      "stem": "Verdadeiro ou falso: em uma implantação Multi-AZ do Amazon RDS, as transações são replicadas de forma ASSÍNCRONA da instância primária para a instância em espera.",
+      "options": [
+        { "id": "v", "text": "Verdadeiro" },
+        { "id": "f", "text": "Falso" }
+      ],
+      "correct": ["f"],
+      "explanation": {
+        "summary": "No Multi-AZ a replicação é SÍNCRONA: a gravação é confirmada nas duas instâncias.",
+        "whyCorrect": "Após a cópia inicial completa, as transações são replicadas de forma síncrona para a instância em espera. Assim, se a primária falhar, a instância em espera já tem os mesmos dados confirmados.",
+        "whyOthersWrong": {
+          "v": "Replicação assíncrona é característica das réplicas de leitura, não do Multi-AZ. Na prova, associe Multi-AZ → síncrona → disponibilidade."
+        },
+        "scene": {
+          "template": "rds-multi-az",
+          "params": {},
+          "steps": [
+            {
+              "caption": "O aplicativo grava uma transação na instância primária.",
+              "focus": ["app-1", "primary"],
+              "packet": { "path": ["app-1", "primary"] }
+            },
+            {
+              "caption": "A replicação é síncrona: a gravação só é confirmada quando também chega à instância em espera.",
+              "focus": ["primary", "standby"],
+              "packet": { "path": ["primary", "standby"] }
+            },
+            {
+              "caption": "Se a primária falhar, a instância em espera já tem todas as transações confirmadas.",
+              "focus": ["standby"]
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q15",
+      "examDomain": "technology",
+      "difficulty": 2,
+      "kind": "scenario",
+      "context": "Uma VPC tem duas zonas de disponibilidade. Na AZ 1 estão uma instância EC2 do aplicativo e a instância primária do RDS. Na AZ 2 estão outra instância EC2 do aplicativo e a instância do RDS em espera, criada pela implantação Multi-AZ.",
+      "stem": "Em operação normal, qual é o papel da instância em espera?",
+      "options": [
+        { "id": "a", "text": "Atender às requisições dos aplicativos que rodam na AZ 2" },
+        {
+          "id": "b",
+          "text": "Oferecer redundância dos dados, recebendo a replicação síncrona da primária, sem processar as requisições dos aplicativos"
+        },
+        { "id": "c", "text": "Servir como réplica de leitura para os relatórios da empresa" },
+        { "id": "d", "text": "Guardar um backup que precisa ser restaurado manualmente em caso de falha" }
+      ],
+      "correct": ["b"],
+      "explanation": {
+        "summary": "A primária atende os aplicativos das DUAS AZs; a instância em espera só garante redundância.",
+        "whyCorrect": "A instância primária processa as requisições dos aplicativos nas AZs 1 e 2. A instância em espera recebe a replicação síncrona e fica pronta: se a primária ou a AZ 1 falhar, ou durante uma manutenção planejada, o RDS promove a instância em espera automaticamente.",
+        "whyOthersWrong": {
+          "a": "Os aplicativos da AZ 2 também se conectam à primária. A instância em espera não recebe tráfego enquanto a primária está saudável.",
+          "c": "Na implantação Multi-AZ padrão, a instância em espera não aceita leituras. Para escalar leituras existem as réplicas de leitura.",
+          "d": "Não há restauração manual: a instância em espera já está sincronizada e o failover é automático."
+        },
+        "scene": {
+          "template": "rds-multi-az",
+          "params": {},
+          "steps": [
+            {
+              "caption": "A primária atende os aplicativos das duas zonas.",
+              "focus": ["app-1", "primary"],
+              "packet": { "path": ["app-1", "primary"] }
+            },
+            {
+              "caption": "Até o aplicativo da zona 2 atravessa até a primária, na zona 1.",
+              "focus": ["app-2", "primary"],
+              "packet": { "path": ["app-2", "primary"] }
+            },
+            {
+              "caption": "A instância em espera não recebe requisições, apenas a replicação síncrona.",
+              "focus": ["primary", "standby"],
+              "packet": { "path": ["primary", "standby"] }
+            },
+            {
+              "caption": "Se a primária falhar, o RDS promove a instância em espera automaticamente, sem restauração manual.",
+              "focus": ["standby"],
+              "alert": ["primary"],
+              "labels": { "standby": "RDS · nova primária" }
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q16",
+      "examDomain": "technology",
+      "difficulty": 2,
+      "kind": "multi",
+      "stem": "Quais DOIS benefícios a implantação Multi-AZ do Amazon RDS oferece? (Escolha 2.)",
+      "options": [
+        { "id": "a", "text": "Maior disponibilidade durante a manutenção planejada do sistema" },
+        { "id": "b", "text": "Dobra a capacidade de leitura, porque as duas instâncias atendem consultas" },
+        { "id": "c", "text": "Proteção contra a falha da instância ou de uma zona de disponibilidade inteira" },
+        { "id": "d", "text": "Custo menor, porque a instância em espera é gratuita" },
+        { "id": "e", "text": "Dispensa os backups, já que os dados estão em duas AZs" }
+      ],
+      "correct": ["a", "c"],
+      "explanation": {
+        "summary": "Multi-AZ serve para DISPONIBILIDADE: continuar funcionando na manutenção e em falhas de instância ou de AZ.",
+        "whyCorrect": "Executar o banco em várias zonas de disponibilidade aumenta a disponibilidade durante a manutenção planejada e evita interrupções causadas por falhas do banco ou da própria AZ, porque a instância em espera assume automaticamente.",
+        "whyOthersWrong": {
+          "b": "A instância em espera não atende consultas. Para aumentar a capacidade de leitura, use réplicas de leitura.",
+          "d": "A instância em espera é cobrada; o Multi-AZ custa mais que uma instância única (Single-AZ).",
+          "e": "A replicação copia também exclusões e erros. Backups e snapshots continuam necessários para voltar a um ponto anterior."
+        },
+        "scene": {
+          "template": "rds-multi-az",
+          "params": {},
+          "steps": [
+            {
+              "caption": "Manutenção planejada ou falha: a primária da zona 1 fica indisponível.",
+              "focus": [],
+              "alert": ["primary"]
+            },
+            {
+              "caption": "Mesmo que a zona de disponibilidade 1 inteira caia, os dados continuam na zona 2.",
+              "focus": ["standby"],
+              "alert": ["az-1", "primary"]
+            },
+            {
+              "caption": "O RDS faz o failover: a instância em espera vira a nova primária.",
+              "focus": ["standby"],
+              "alert": ["az-1", "primary"],
+              "labels": { "standby": "RDS · nova primária" }
+            },
+            {
+              "caption": "Os aplicativos voltam a ser atendidos, sem restaurar nenhum backup.",
+              "focus": ["app-2", "standby"],
+              "alert": ["primary"],
+              "labels": { "standby": "RDS · nova primária" },
+              "packet": { "path": ["app-2", "standby"] }
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q17",
+      "examDomain": "security",
+      "difficulty": 2,
+      "kind": "scenario",
+      "context": "Um aplicativo web roda em instâncias EC2 que precisam ser acessadas pela internet. O banco Amazon RDS deve ser acessível apenas pelo aplicativo, nunca diretamente pela internet.",
+      "stem": "Qual arquitetura segue as boas práticas?",
+      "options": [
+        { "id": "a", "text": "EC2 e RDS na sub-rede pública, com o RDS marcado como acessível publicamente" },
+        { "id": "b", "text": "EC2 na sub-rede privada e RDS na sub-rede pública" },
+        {
+          "id": "c",
+          "text": "EC2 na sub-rede pública e RDS na sub-rede privada, com o security group do RDS liberando apenas o security group do aplicativo"
+        },
+        { "id": "d", "text": "RDS fora da VPC, acessado pelo endereço público" }
+      ],
+      "correct": ["c"],
+      "explanation": {
+        "summary": "Aplicativo na sub-rede pública, banco na sub-rede privada: a internet nunca fala direto com o RDS.",
+        "whyCorrect": "Como mostra o diagrama de alta disponibilidade do módulo, as instâncias do RDS ficam em sub-redes privadas, sem rota para o Internet Gateway. O security group do banco aceita conexões somente do security group do aplicativo, na porta do mecanismo (por exemplo, 3306 no MySQL).",
+        "whyOthersWrong": {
+          "a": "Um banco acessível publicamente em sub-rede pública fica exposto a ataques vindos da internet.",
+          "b": "É o inverso do correto: o banco ficaria exposto e o aplicativo, que precisa receber os usuários, ficaria inacessível.",
+          "d": "As instâncias do RDS são executadas dentro de uma VPC; expô-las por endereço público contraria o requisito."
+        },
+        "scene": {
+          "template": "vpc-network",
+          "params": { "showNat": false, "webLabel": "EC2 · aplicativo", "dbLabel": "Amazon RDS" },
+          "steps": [
+            {
+              "caption": "O aplicativo fica na sub-rede pública, com rota para o Internet Gateway.",
+              "focus": ["public-subnet", "web", "igw"]
+            },
+            {
+              "caption": "O RDS fica na sub-rede privada, sem rota para a internet.",
+              "focus": ["private-subnet", "db"]
+            },
+            {
+              "caption": "Os usuários chegam ao aplicativo pela internet.",
+              "focus": ["internet", "igw", "web"],
+              "packet": { "path": ["internet", "igw", "web"] }
+            },
+            {
+              "caption": "Só o aplicativo consulta o banco, dentro da VPC.",
+              "focus": ["web", "db"],
+              "packet": { "path": ["web", "db"] }
+            },
+            {
+              "caption": "Uma conexão direta da internet ao banco não tem rota e é barrada.",
+              "focus": ["internet", "igw", "db"],
+              "packet": { "path": ["internet", "igw", "db"], "blocked": true }
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q18",
+      "examDomain": "technology",
+      "difficulty": 2,
+      "kind": "single",
+      "stem": "Qual comando da AWS CLI cria um snapshot manual de uma instância do Amazon RDS?",
+      "options": [
+        { "id": "a", "text": "aws rds create-db-instance" },
+        { "id": "b", "text": "aws ec2 create-snapshot" },
+        { "id": "c", "text": "aws rds create-db-snapshot" },
+        { "id": "d", "text": "aws rds describe-db-instances" }
+      ],
+      "correct": ["c"],
+      "explanation": {
+        "summary": "aws rds create-db-snapshot --db-instance-identifier <instância> --db-snapshot-identifier <nome>",
+        "whyCorrect": "O create-db-snapshot, do namespace rds, gera um snapshot manual da instância indicada, que permanece até ser excluído.",
+        "whyOthersWrong": {
+          "a": "O create-db-instance cria uma instância de banco de dados nova, não um backup.",
+          "b": "O aws ec2 create-snapshot faz snapshot de um volume EBS de uma instância EC2, não de uma instância RDS.",
+          "d": "O describe-db-instances apenas lista as instâncias e seus detalhes."
+        },
+        "scene": {
+          "template": "aws-cli",
+          "params": { "command": "aws rds create-db-snapshot" },
+          "steps": [
+            {
+              "caption": "O comando começa com aws rds, então vai para a API do Amazon RDS.",
+              "focus": ["terminal", "rds-api"],
+              "packet": { "path": ["terminal", "rds-api"] }
+            },
+            {
+              "caption": "create-db-snapshot gera um snapshot manual da instância indicada.",
+              "focus": ["rds-api", "db", "snapshot"],
+              "packet": { "path": ["terminal", "rds-api", "db", "snapshot"] }
+            },
+            {
+              "caption": "aws ec2 create-snapshot vai para outra API e só tira snapshot de volume EBS, não de uma instância RDS.",
+              "focus": ["terminal", "ec2-api", "ec2"],
+              "labels": { "terminal": "aws ec2 create-snapshot" },
+              "packet": { "path": ["terminal", "ec2-api", "db"], "blocked": true }
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    },
+    {
+      "id": "rds-q19",
+      "examDomain": "technology",
+      "difficulty": 1,
+      "kind": "single",
+      "stem": "Um administrador acabou de criar uma instância RDS e quer conferir pela AWS CLI se o status dela já é \"available\" e qual é o endpoint de conexão. Qual comando ele deve usar?",
+      "options": [
+        { "id": "a", "text": "aws rds describe-db-instances" },
+        { "id": "b", "text": "aws rds modify-db-instance" },
+        { "id": "c", "text": "aws ec2 describe-instances" },
+        { "id": "d", "text": "aws rds reboot-db-instance" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "summary": "describe-db-instances mostra status, endpoint, classe, mecanismo e outras informações das instâncias RDS.",
+        "whyCorrect": "Os comandos describe-* da AWS CLI são de leitura. O aws rds describe-db-instances retorna os detalhes de cada instância, incluindo DBInstanceStatus e Endpoint. Isso é útil porque a criação pode levar até 20 minutos, dependendo da classe e do armazenamento.",
+        "whyOthersWrong": {
+          "b": "O modify-db-instance ALTERA a configuração da instância (classe, armazenamento etc.), não só consulta.",
+          "c": "O aws ec2 describe-instances lista instâncias EC2; instâncias RDS não aparecem nele.",
+          "d": "O reboot-db-instance reinicia a instância e causa uma interrupção; não serve para consultar o status."
+        },
+        "scene": {
+          "template": "aws-cli",
+          "params": { "command": "aws rds describe-db-instances", "dbStatus": "status: available" },
+          "steps": [
+            {
+              "caption": "Comandos describe-* só leem: ele pede à API do RDS os detalhes das instâncias.",
+              "focus": ["terminal", "rds-api", "db"],
+              "packet": { "path": ["terminal", "rds-api", "db"] }
+            },
+            {
+              "caption": "A resposta volta com o status (DBInstanceStatus) e o endpoint de conexão.",
+              "focus": ["db", "terminal"],
+              "labels": { "db": "Instância RDS · endpoint" },
+              "packet": { "path": ["db", "rds-api", "terminal"] }
+            },
+            {
+              "caption": "aws ec2 describe-instances consulta outra API e lista só instâncias EC2.",
+              "focus": ["terminal", "ec2-api", "ec2"],
+              "labels": { "terminal": "aws ec2 describe-instances" },
+              "packet": { "path": ["terminal", "ec2-api", "ec2"] }
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-rds.pdf" }
+    }
+  ]
+}

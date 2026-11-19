@@ -1,0 +1,22 @@
+node_modules
+dist
+coverage
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Claude Code: configuração pessoal fica fora; launch.json é compartilhado
+.claude/*
+!.claude/launch.json
+
+# Material da Escola da Nuvem/AWS — direitos autorais, não versionar
+content/source/*
+!content/source/.gitkeep
+content/drafts/*
+!content/drafts/.gitkeep
+
+# Fonte Roguepunk: licença de uso pessoal, não pode ser redistribuída.
+# Sem o arquivo, o logo cai para a fonte de display (Orbitron).
+apps/web/public/fonts/Roguepunk.ttf

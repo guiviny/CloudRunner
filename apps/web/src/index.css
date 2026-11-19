@@ -1,0 +1,113 @@
+@import 'tailwindcss';
+
+/* Tokens do design system "Nuvem Trilha Neon" (cyberpunk, neon equilibrado) */
+@theme {
+  --font-sans: 'Space Grotesk', system-ui, sans-serif;
+  --font-display: 'Orbitron', 'Space Grotesk', system-ui, sans-serif;
+  --color-bg: #0a0b14;
+  --color-surface: #12142a;
+  --color-surface-2: #1a1d3a;
+  --color-ink: #e6f1ff;
+  --color-muted: #8b93b8;
+  --color-line: #2a2f55;
+  /* texto e ícones sobre preenchimentos neon */
+  --color-on-neon: #0a0b14;
+  --color-green: #39ff88;
+  --color-green-dark: #12a85a;
+  --color-green-light: #0c2e20;
+  --color-blue: #00e5ff;
+  --color-blue-dark: #0091a8;
+  --color-blue-light: #062a36;
+  --color-red: #ff2e63;
+  --color-red-dark: #b3123f;
+  --color-red-light: #3d0a1a;
+  --color-gold: #ffd60a;
+  --color-gold-dark: #a88a00;
+  --color-orange: #ff9e1f;
+  --color-magenta: #ff2bd6;
+  --color-locked: #1e2142;
+  --color-locked-dark: #0f1129;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-bg font-sans text-ink antialiased;
+  background-image:
+    radial-gradient(ellipse 80% 40% at 50% 0%, rgb(255 43 214 / 0.08), transparent),
+    linear-gradient(rgb(0 229 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(0 229 255 / 0.04) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    32px 32px,
+    32px 32px;
+  background-attachment: fixed;
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: var(--color-magenta);
+  color: var(--color-on-neon);
+}
+
+/* Botão "3D" com borda inferior */
+@utility btn-3d {
+  @apply rounded-2xl border-b-4 font-display font-extrabold uppercase tracking-widest transition-[transform,border,filter] hover:brightness-110 active:translate-y-[2px] active:border-b-2 disabled:pointer-events-none;
+}
+
+/* Canto cortado (superior esquerdo e inferior direito) — só em blocos sem borda */
+@utility clip-corner {
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+}
+
+/* Logo CloudRunner: fonte Roguepunk (Cikareotype Studio, licença de uso pessoal) */
+@font-face {
+  font-family: 'Roguepunk';
+  src: url('/fonts/Roguepunk.ttf') format('truetype');
+  font-display: block;
+}
+
+.cr-logo {
+  position: relative;
+  display: inline-block;
+  font-family: 'Roguepunk', var(--font-display);
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.cr-logo-base {
+  position: relative;
+  display: block;
+  color: var(--color-blue);
+  text-shadow:
+    -0.03em 0.024em 0 var(--color-magenta),
+    0 0 0.18em rgb(0 229 255 / 0.45);
+}
+
+/* Fatias do glitch: posição e recorte vêm do componente Logo a cada quadro */
+.cr-logo-gl {
+  position: absolute;
+  inset: 0 auto auto 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.cr-logo-gl[data-on] {
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

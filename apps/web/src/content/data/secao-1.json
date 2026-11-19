@@ -1,0 +1,493 @@
+{
+  "id": "secao-1",
+  "number": 1,
+  "title": "Redes e segurança na AWS",
+  "units": [
+    {
+      "id": "u1",
+      "title": "VPC: sua rede privada na nuvem",
+      "chestAfter": 0,
+      "lessons": [
+        { "id": "u1-l1", "title": "Internet Gateway e NAT", "type": "learn", "questionIds": ["q1", "q2", "q3"] },
+        { "id": "u1-l2", "title": "Sub-redes e conectividade", "type": "practice", "questionIds": ["q4", "q5", "q6"] }
+      ]
+    },
+    {
+      "id": "u2",
+      "title": "Segurança: quem protege o quê",
+      "chestAfter": 0,
+      "lessons": [
+        {
+          "id": "u2-l1",
+          "title": "Responsabilidade compartilhada",
+          "type": "learn",
+          "questionIds": ["q7", "q8", "q9"]
+        },
+        { "id": "u2-l2", "title": "Security Groups e NACLs", "type": "practice", "questionIds": ["q10", "q11", "q12"] }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "examDomain": "technology",
+      "difficulty": 1,
+      "kind": "single",
+      "stem": "Uma empresa quer que instâncias EC2 de uma sub-rede sejam acessíveis diretamente pela internet. Qual componente precisa estar anexado à VPC e aparecer na tabela de rotas dessa sub-rede?",
+      "options": [
+        { "id": "a", "text": "Internet Gateway" },
+        { "id": "b", "text": "NAT Gateway" },
+        { "id": "c", "text": "Virtual Private Gateway" },
+        { "id": "d", "text": "VPC Peering" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "summary": "O Internet Gateway (IGW) é a porta da VPC para a internet, nos dois sentidos.",
+        "whyCorrect": "Um IGW anexado à VPC, mais uma rota 0.0.0.0/0 → igw na tabela de rotas da sub-rede, permite que a internet alcance instâncias com IP público e que elas respondam.",
+        "whyOthersWrong": {
+          "b": "O NAT Gateway só permite conexões de SAÍDA a partir de sub-redes privadas; a internet não consegue iniciar conexões através dele.",
+          "c": "O Virtual Private Gateway é o lado AWS de uma VPN site-to-site, que liga a VPC à sua rede corporativa, não à internet pública.",
+          "d": "O VPC Peering conecta duas VPCs entre si de forma privada e não dá acesso à internet."
+        },
+        "scene": {
+          "template": "vpc-network",
+          "params": { "showNat": false },
+          "steps": [
+            { "caption": "A VPC é uma rede isolada: sozinha, ela não fala com a internet.", "focus": ["vpc"] },
+            {
+              "caption": "O Internet Gateway é anexado à VPC e funciona como a porta de entrada e saída.",
+              "focus": ["igw"]
+            },
+            {
+              "caption": "Com a rota 0.0.0.0/0 → IGW, a requisição chega até a instância da sub-rede pública.",
+              "focus": ["internet", "igw", "public-subnet", "web"],
+              "packet": { "path": ["internet", "igw", "web"] }
+            }
+          ]
+        }
+      },
+      "sourceRef": { "file": "modulo-redes.pdf" }
+    },
+    {
+      "id": "q2",
+      "examDomain": "technology",
+      "difficulty": 2,
+      "kind": "scenario",
+      "context": "Um servidor de banco de dados roda em uma sub-rede privada. Ele precisa baixar atualizações de segurança da internet, mas a equipe de segurança exige que nenhuma conexão iniciada na internet consiga chegar até ele.",
+      "stem": "Qual solução atende a esses requisitos?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Criar um NAT Gateway em uma sub-rede pública e rotear o tráfego 0.0.0.0/0 da sub-rede privada para ele"
+        },
+        { "id": "b", "text": "Atribuir um IP público ao servidor e rotear a sub-rede privada para o Internet Gateway" },
+        { "id": "c", "text": "Liberar todo o tráfego de entrada no security group do servidor" },
+        { "id": "d", "text": "Mover o servidor para a sub-rede pública" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "summary": "O NAT permite que a sub-rede privada SAIA para a internet, mas bloqueia conexões que tentam ENTRAR.",
+        "whyCorrect": "O NAT Gateway fica na sub-rede pública (que tem rota para o IGW). A sub-rede privada envia o tráfego de internet para o NAT, que traduz o endereço e devolve as respostas. Conexões iniciadas de fora não têm como chegar ao servidor.",
+        "whyOthersWrong": {
+          "b": "Com IP público e rota para o IGW, a sub-rede deixa de ser privada e o servidor passa a ser alcançável pela internet.",
+          "c": "Liberar a entrada no security group faz o oposto do que foi pedido e expõe o banco de dados.",
+          "d": "Na sub-rede pública o banco poderia receber conexões da internet, o que viola o requisito."
+        },
+        "scene": {
+          "template": "vpc-network",
+          "params": {},
+          "steps": [
+            {
+              "caption": "O banco fica na sub-rede privada, que não tem rota para o Internet Gateway.",
+              "focus": ["private-subnet", "db"]
+            },
+            {
+              "caption": "Para buscar atualizações, o tráfego vai do banco para o NAT, depois para o IGW e chega à internet.",
+              "focus": ["db", "nat", "igw", "internet"],
+              "packet": { "path": ["db", "nat", "igw", "internet"] }
+            },
+            {
+              "caption": "Uma conexão iniciada na internet é barrada: o NAT só aceita respostas a conexões que saíram de dentro.",
+              "focus": ["internet", "igw", "nat"],
+              "packet": { "path": ["internet", "igw", "nat"], "blocked": true }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q3",
+      "examDomain": "technology",
+      "difficulty": 1,
+      "kind": "truefalse",
+      "stem": "Verdadeiro ou falso: uma sub-rede é considerada pública quando a tabela de rotas associada a ela tem uma rota para um Internet Gateway.",
+      "options": [
+        { "id": "v", "text": "Verdadeiro" },
+        { "id": "f", "text": "Falso" }
+      ],
+      "correct": ["v"],
+      "explanation": {
+        "summary": "O que torna uma sub-rede pública é a ROTA para o IGW, e não o nome ou outra configuração.",
+        "whyCorrect": "Na AWS, uma sub-rede é \"pública\" exatamente quando a tabela de rotas dela envia tráfego (normalmente 0.0.0.0/0) para um Internet Gateway. Sem essa rota, ela é privada.",
+        "whyOthersWrong": {
+          "f": "Não existe uma opção \"pública\" para marcar na sub-rede: a definição vem da tabela de rotas."
+        },
+        "scene": {
+          "template": "vpc-network",
+          "params": { "showNat": false },
+          "steps": [
+            {
+              "caption": "As duas sub-redes ficam na mesma VPC. A diferença entre elas está na tabela de rotas.",
+              "focus": ["public-subnet", "private-subnet"]
+            },
+            {
+              "caption": "A sub-rede pública tem a rota 0.0.0.0/0 → IGW.",
+              "focus": ["public-subnet", "igw"],
+              "packet": { "path": ["web", "igw", "internet"] }
+            },
+            {
+              "caption": "A sub-rede privada não tem essa rota, então o tráfego dela não alcança a internet.",
+              "focus": ["private-subnet", "db"],
+              "packet": { "path": ["db", "igw"], "blocked": true }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q4",
+      "examDomain": "technology",
+      "difficulty": 2,
+      "kind": "single",
+      "stem": "Qual afirmação sobre VPCs e sub-redes está correta?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Uma VPC abrange todas as zonas de disponibilidade de uma Região, e cada sub-rede fica em uma única AZ"
+        },
+        { "id": "b", "text": "Uma sub-rede pode abranger várias zonas de disponibilidade" },
+        { "id": "c", "text": "Uma VPC pode abranger várias Regiões" },
+        { "id": "d", "text": "Cada zona de disponibilidade exige uma VPC separada" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "summary": "VPC = escopo da Região. Sub-rede = escopo de uma AZ.",
+        "whyCorrect": "Você cria a VPC em uma Região e ela pode usar todas as AZs dessa Região. Cada sub-rede pertence a exatamente uma AZ. Para ter alta disponibilidade, crie sub-redes em AZs diferentes.",
+        "whyOthersWrong": {
+          "b": "Uma sub-rede nunca abrange mais de uma AZ. Para cobrir várias AZs, crie uma sub-rede em cada uma.",
+          "c": "A VPC é regional. Para ligar Regiões, use recursos como VPC Peering entre Regiões ou o Transit Gateway.",
+          "d": "Uma única VPC já abrange todas as AZs da Região."
+        },
+        "scene": {
+          "template": "vpc-network",
+          "params": {
+            "publicSubnetLabel": "Sub-rede A · us-east-1a",
+            "privateSubnetLabel": "Sub-rede B · us-east-1b",
+            "showNat": false
+          },
+          "steps": [
+            { "caption": "A VPC envolve a Região inteira (aqui, us-east-1).", "focus": ["vpc"] },
+            {
+              "caption": "Cada sub-rede fica presa a uma única AZ: a sub-rede A está em us-east-1a…",
+              "focus": ["public-subnet"]
+            },
+            {
+              "caption": "…e a sub-rede B está em us-east-1b. Distribuir recursos entre AZs aumenta a disponibilidade.",
+              "focus": ["private-subnet"]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q5",
+      "examDomain": "technology",
+      "difficulty": 2,
+      "kind": "multi",
+      "stem": "Quais DOIS itens são necessários para que uma instância EC2 em uma sub-rede pública seja acessada a partir da internet? (Escolha 2.)",
+      "options": [
+        { "id": "a", "text": "Um Internet Gateway anexado à VPC, com rota na tabela de rotas" },
+        { "id": "b", "text": "Um endereço IP público ou Elastic IP na instância" },
+        { "id": "c", "text": "Um NAT Gateway" },
+        { "id": "d", "text": "AWS Direct Connect" },
+        { "id": "e", "text": "Um VPC endpoint" }
+      ],
+      "correct": ["a", "b"],
+      "explanation": {
+        "summary": "Para ser acessada da internet, a instância precisa de um caminho (IGW + rota) e de um endereço público.",
+        "whyCorrect": "O IGW, com a rota correspondente, cria o caminho entre a internet e a VPC. A instância também precisa de um IP público ou Elastic IP, porque um IP privado (10.x, 172.16.x, 192.168.x) não é roteável na internet.",
+        "whyOthersWrong": {
+          "c": "O NAT Gateway serve para tráfego de saída de sub-redes privadas e não ajuda conexões de entrada.",
+          "d": "O Direct Connect é um link privado entre o seu data center e a AWS, não acesso público.",
+          "e": "Um VPC endpoint dá acesso privado a serviços da AWS (como o S3) sem passar pela internet."
+        },
+        "scene": {
+          "template": "vpc-network",
+          "params": { "webLabel": "EC2 · IP público 54.x.x.x", "showNat": false },
+          "steps": [
+            {
+              "caption": "Requisito 1: o Internet Gateway anexado e a rota 0.0.0.0/0 → IGW.",
+              "focus": ["igw", "public-subnet"]
+            },
+            {
+              "caption": "Requisito 2: a instância precisa de um IP público, já que IPs privados não existem na internet.",
+              "focus": ["web"]
+            },
+            {
+              "caption": "Com os dois itens, a requisição chega até a instância.",
+              "focus": ["internet", "igw", "web"],
+              "packet": { "path": ["internet", "igw", "web"] }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q6",
+      "examDomain": "technology",
+      "difficulty": 2,
+      "kind": "scenario",
+      "context": "Uma empresa precisa de uma conexão de rede dedicada e privada entre seu data center e a AWS, com largura de banda consistente e sem passar pela internet pública.",
+      "stem": "Qual serviço atende a esse requisito?",
+      "options": [
+        { "id": "a", "text": "AWS Direct Connect" },
+        { "id": "b", "text": "AWS Site-to-Site VPN" },
+        { "id": "c", "text": "Internet Gateway" },
+        { "id": "d", "text": "Amazon CloudFront" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "summary": "Dedicada, privada, banda consistente e sem internet: é o Direct Connect.",
+        "whyCorrect": "O AWS Direct Connect cria um link físico dedicado entre a sua rede e a AWS. Como o tráfego não passa pela internet pública, a latência e a largura de banda são mais previsíveis.",
+        "whyOthersWrong": {
+          "b": "A VPN site-to-site é criptografada, mas o tráfego passa pela internet pública, então a banda não é consistente.",
+          "c": "O Internet Gateway conecta a VPC à internet pública, o contrário do que foi pedido.",
+          "d": "O CloudFront é uma CDN para entregar conteúdo aos usuários e não liga um data center à AWS."
+        }
+      }
+    },
+    {
+      "id": "q7",
+      "examDomain": "security",
+      "difficulty": 1,
+      "kind": "single",
+      "stem": "No modelo de responsabilidade compartilhada da AWS, qual destes itens é responsabilidade da AWS?",
+      "options": [
+        { "id": "a", "text": "A segurança física dos data centers" },
+        { "id": "b", "text": "A configuração dos security groups" },
+        { "id": "c", "text": "O gerenciamento das permissões IAM dos usuários" },
+        { "id": "d", "text": "A criptografia dos dados do cliente" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "summary": "A AWS cuida da segurança DA nuvem; o cliente cuida da segurança NA nuvem.",
+        "whyCorrect": "A AWS protege a infraestrutura que executa os serviços: hardware, data centers, Regiões, AZs e edge locations. A segurança física das instalações é sempre da AWS.",
+        "whyOthersWrong": {
+          "b": "Os security groups são configuração de rede e firewall, que fica do lado do cliente.",
+          "c": "O cliente decide quem acessa o quê. Usuários, grupos e políticas IAM são responsabilidade dele.",
+          "d": "Os dados pertencem ao cliente, e protegê-los (criptografia, classificação) é responsabilidade dele."
+        },
+        "scene": {
+          "template": "shared-responsibility",
+          "params": {},
+          "steps": [
+            {
+              "caption": "A base (em laranja) é da AWS: hardware, data centers, Regiões e AZs.",
+              "focus": ["aws-infra", "aws-services"]
+            },
+            { "caption": "A segurança física dos data centers está nessa camada de baixo.", "focus": ["aws-infra"] },
+            {
+              "caption": "Firewall (security groups), IAM e dados ficam nas camadas de cima (em azul), que são do cliente.",
+              "focus": ["cust-os", "cust-iam", "cust-data"]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q8",
+      "examDomain": "security",
+      "difficulty": 2,
+      "kind": "scenario",
+      "context": "Uma empresa roda sua aplicação em instâncias Amazon EC2 com Linux.",
+      "stem": "Quem é responsável por aplicar patches de segurança no sistema operacional dessas instâncias?",
+      "options": [
+        { "id": "a", "text": "O cliente" },
+        { "id": "b", "text": "A AWS" },
+        { "id": "c", "text": "A AWS e o cliente, em partes iguais" },
+        { "id": "d", "text": "O AWS Support, automaticamente" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "summary": "No EC2 (IaaS), o sistema operacional convidado é do cliente.",
+        "whyCorrect": "A AWS entrega a infraestrutura e o hypervisor. A partir do sistema operacional convidado para cima (patches, softwares, firewall), a responsabilidade é sua. Ferramentas como o AWS Systems Manager Patch Manager ajudam a automatizar, mas a responsabilidade continua sendo do cliente.",
+        "whyOthersWrong": {
+          "b": "A AWS aplica patches na infraestrutura e no hypervisor, mas não no sistema operacional da sua instância EC2.",
+          "c": "A divisão é por camada, não meio a meio. A camada do sistema operacional é inteira do cliente no EC2.",
+          "d": "O AWS Support orienta e ajuda, mas não aplica patches nas suas instâncias."
+        },
+        "scene": {
+          "template": "shared-responsibility",
+          "params": {},
+          "steps": [
+            {
+              "caption": "No EC2, a AWS entrega as camadas de baixo: infraestrutura e virtualização.",
+              "focus": ["aws-infra", "aws-services"]
+            },
+            {
+              "caption": "O sistema operacional convidado (e os patches dele) fica com o cliente.",
+              "focus": ["cust-os"]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q9",
+      "examDomain": "security",
+      "difficulty": 2,
+      "kind": "single",
+      "stem": "Uma equipe migra um banco de dados MySQL instalado em EC2 para o Amazon RDS. Qual responsabilidade passa a ser da AWS?",
+      "options": [
+        { "id": "a", "text": "Aplicar patches no sistema operacional e no software do banco de dados" },
+        { "id": "b", "text": "Controlar quais usuários têm acesso aos dados" },
+        { "id": "c", "text": "Classificar os dados armazenados" },
+        { "id": "d", "text": "Definir as regras do security group do banco" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "summary": "Em serviços gerenciados como o RDS, a AWS assume o sistema operacional e os patches do motor do banco.",
+        "whyCorrect": "No RDS você não acessa o sistema operacional. A AWS cuida da instalação, dos patches do sistema e do MySQL, e dos backups automatizados. Você continua cuidando dos dados, do acesso e das regras de rede.",
+        "whyOthersWrong": {
+          "b": "O controle de acesso aos dados (usuários do banco e IAM) continua sendo do cliente.",
+          "c": "Os dados são sempre do cliente, assim como a classificação deles.",
+          "d": "Os security groups continuam sob a configuração do cliente, mesmo no RDS."
+        },
+        "scene": {
+          "template": "shared-responsibility",
+          "params": { "managedService": "RDS" },
+          "steps": [
+            {
+              "caption": "Com o RDS, a camada do sistema operacional e dos patches do banco passa para o lado da AWS (agora em laranja).",
+              "focus": ["cust-os"]
+            },
+            {
+              "caption": "Os dados, o acesso e a configuração de rede continuam com o cliente.",
+              "focus": ["cust-iam", "cust-data", "cust-network"]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q10",
+      "examDomain": "security",
+      "difficulty": 2,
+      "kind": "single",
+      "stem": "Qual característica diferencia um security group de uma network ACL (NACL)?",
+      "options": [
+        { "id": "a", "text": "O security group é stateful: o tráfego de resposta é liberado automaticamente" },
+        { "id": "b", "text": "O security group atua no nível da sub-rede" },
+        { "id": "c", "text": "O security group aceita regras de negação explícitas" },
+        { "id": "d", "text": "O security group avalia as regras em ordem numérica" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "summary": "SG: stateful, nível da instância, só regras de permissão. NACL: stateless, nível da sub-rede, permissão e negação em ordem.",
+        "whyCorrect": "O security group lembra as conexões (é stateful). Se a entrada foi permitida, a resposta sai automaticamente. A NACL é stateless: a resposta também precisa de uma regra de saída.",
+        "whyOthersWrong": {
+          "b": "Quem atua no nível da sub-rede é a NACL. O security group atua na interface da instância.",
+          "c": "O security group só tem regras de permissão (allow). Negações explícitas existem apenas na NACL.",
+          "d": "A avaliação em ordem numérica é da NACL. No security group, todas as regras são avaliadas juntas."
+        },
+        "scene": {
+          "template": "security-layers",
+          "params": {},
+          "steps": [
+            {
+              "caption": "A requisição passa primeiro pela NACL (borda da sub-rede) e depois pelo security group (borda da instância).",
+              "focus": ["internet", "nacl", "sg", "ec2"],
+              "packet": { "path": ["internet", "nacl", "sg", "ec2"] }
+            },
+            {
+              "caption": "Na volta, o SG libera a resposta automaticamente porque é stateful. A NACL, que é stateless, precisa de uma regra de saída.",
+              "focus": ["sg", "nacl"],
+              "packet": { "path": ["ec2", "sg", "nacl", "internet"] }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q11",
+      "examDomain": "security",
+      "difficulty": 2,
+      "kind": "scenario",
+      "context": "A equipe de segurança identificou um endereço IP malicioso fazendo varreduras contra várias instâncias da mesma sub-rede.",
+      "stem": "Qual a forma mais adequada de bloquear esse IP para a sub-rede inteira?",
+      "options": [
+        { "id": "a", "text": "Adicionar uma regra DENY para o IP na network ACL da sub-rede" },
+        { "id": "b", "text": "Adicionar uma regra DENY para o IP no security group" },
+        { "id": "c", "text": "Desanexar o Internet Gateway da VPC" },
+        { "id": "d", "text": "Criar uma política IAM com Deny para o IP" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "summary": "Para bloquear um IP específico, use a NACL: ela aceita regras DENY e protege a sub-rede inteira.",
+        "whyCorrect": "A NACL atua na borda da sub-rede e aceita regras de negação explícitas. Uma regra DENY com número baixo (avaliada primeiro) bloqueia o IP antes que ele chegue a qualquer instância.",
+        "whyOthersWrong": {
+          "b": "Security groups não têm regras DENY, apenas de permissão.",
+          "c": "Desanexar o IGW derruba o acesso de todos os usuários legítimos, não só do atacante.",
+          "d": "Políticas IAM controlam chamadas à API da AWS, não o tráfego de rede que chega às instâncias."
+        },
+        "scene": {
+          "template": "security-layers",
+          "params": { "naclRule": "DENY 203.0.113.7" },
+          "steps": [
+            { "caption": "A NACL é a primeira barreira, na entrada da sub-rede.", "focus": ["nacl"] },
+            {
+              "caption": "Com a regra DENY, o tráfego do IP malicioso é barrado antes de chegar a qualquer instância.",
+              "focus": ["internet", "nacl"],
+              "packet": { "path": ["internet", "nacl"], "blocked": true }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q12",
+      "examDomain": "security",
+      "difficulty": 1,
+      "kind": "truefalse",
+      "stem": "Verdadeiro ou falso: por padrão, um security group recém-criado permite todo o tráfego de entrada.",
+      "options": [
+        { "id": "v", "text": "Verdadeiro" },
+        { "id": "f", "text": "Falso" }
+      ],
+      "correct": ["f"],
+      "explanation": {
+        "summary": "Um security group novo NEGA toda a entrada e PERMITE toda a saída.",
+        "whyCorrect": "Um security group recém-criado não tem regras de entrada, então nada entra até você liberar. A regra de saída padrão permite todo o tráfego. Isso segue o princípio do menor privilégio.",
+        "whyOthersWrong": {
+          "v": "Quem permite tudo por padrão é a NACL padrão da VPC, não o security group. Uma NACL personalizada, por sua vez, nega tudo até você adicionar regras."
+        },
+        "scene": {
+          "template": "security-layers",
+          "params": { "sgRule": "sem regras de entrada" },
+          "steps": [
+            {
+              "caption": "A NACL padrão deixa passar, mas o SG novo não tem nenhuma regra de entrada e barra o tráfego.",
+              "focus": ["internet", "nacl", "sg"],
+              "packet": { "path": ["internet", "nacl", "sg"], "blocked": true }
+            },
+            {
+              "caption": "Na saída, a regra padrão do SG permite tudo.",
+              "focus": ["ec2", "sg"],
+              "packet": { "path": ["ec2", "sg", "nacl", "internet"] }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
